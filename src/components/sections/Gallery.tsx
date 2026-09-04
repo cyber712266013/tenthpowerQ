@@ -1,143 +1,193 @@
-import { useState, useRef } from "react";
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Lightbox from "../ui/Lightbox";
-import { Reveal } from "../ui/Animations";
+import EditorialMedia from "../ui/EditorialMedia";
 
-const galleryImages = [
-  "/images/hero.png",
-  "/images/ChatGPT Image Sep 3, 2026, 01_34_38 AM.png",
-  "/images/ChatGPT Image Sep 3, 2026, 01_38_18 AM.png",
-  "/images/ChatGPT Image Sep 3, 2026, 01_40_35 AM.png",
-  "/images/ChatGPT Image Sep 3, 2026, 01_44_45 AM.png",
-].filter(Boolean);
-
-/* ─── Individual image with spring "rope" entrance ─── */
-function GalleryImage({ src, index, onClick }: { src: string; index: number; onClick: () => void }) {
-  const sizeClass = index % 3 === 0
-    ? "w-72 md:w-96 aspect-[3/4]"
-    : index % 3 === 1
-    ? "w-64 md:w-80 aspect-[4/5]"
-    : "w-56 md:w-72 aspect-square";
-
-  return (
-    <motion.button
-      initial={{ opacity: 0, y: 60, rotate: index % 2 === 0 ? -1.5 : 1.5 }}
-      whileInView={{ opacity: 1, y: 0, rotate: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{
-        type: "spring",
-        stiffness: 60,
-        damping: 14,
-        mass: 1.2,
-        delay: index * 0.08,
-      }}
-      whileHover={{
-        scale: 1.03,
-        rotate: index % 2 === 0 ? 0.5 : -0.5,
-        transition: { type: "spring", stiffness: 300, damping: 20 },
-      }}
-      onClick={onClick}
-      className={`group shrink-0 overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-500 focus-visible:outline-2 focus-visible:outline-[var(--color-accent)] ${sizeClass}`}
-      aria-label={`فتح الصورة ${index + 1}`}
-    >
-      <motion.img
-        src={src}
-        alt={`صورة من معرض القوة العاشرة ${index + 1}`}
-        className="w-full h-full object-cover"
-        loading="lazy"
-        decoding="async"
-        whileHover={{ scale: 1.08, transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] } }}
-      />
-    </motion.button>
-  );
+export interface VisualWorkItem {
+  id: string;
+  src: string;
+  videoUrl?: string;
+  tilt: number;
+  aspect?: string;
+  alignment: "right" | "left";
 }
 
+const allVisualWorks: VisualWorkItem[] = [
+  {
+    id: "w-spider-villa",
+    src: "/images/image5.png",
+    tilt: -2.2,
+    alignment: "right",
+  },
+  {
+    id: "w1",
+    src: "/images/Image4.png",
+    tilt: 2.2,
+    alignment: "left",
+  },
+  {
+    id: "w2",
+    src: "/images/hero.png",
+    tilt: -1.8,
+    alignment: "right",
+  },
+  {
+    id: "w3",
+    src: "/images/about.png",
+    tilt: 2.0,
+    alignment: "left",
+  },
+  {
+    id: "w4",
+    src: "/images/services/al-quwwa-al-ashira-aluminum-jeddah-2024.jpg",
+    tilt: 2.0,
+    alignment: "left",
+  },
+  // Additional works revealed on "عرض المزيد"
+  {
+    id: "w5",
+    src: "/images/services/al-quwwa-al-ashira-stainless-steel-khobar-2023.jpg",
+    tilt: -2.2,
+    alignment: "right",
+  },
+  {
+    id: "w6",
+    src: "/images/Image2.png",
+    tilt: 1.8,
+    alignment: "left",
+  },
+  {
+    id: "w7",
+    src: "/images/services/building.jpg",
+    tilt: -1.6,
+    alignment: "right",
+  },
+  {
+    id: "w8",
+    src: "/images/services/renovation.jpg",
+    tilt: 2.4,
+    alignment: "left",
+  },
+  {
+    id: "w9",
+    src: "/images/Image1.png",
+    tilt: -2.0,
+    alignment: "right",
+  },
+  {
+    id: "w10",
+    src: "/images/services/maintenance.jpg",
+    tilt: 1.7,
+    alignment: "left",
+  },
+   {
+    id: "w11",
+    src: "/images/al-quwwa-al-ashira-diverse-projects-riyadh-2025-20.jpeg",
+    tilt: 1.7,
+    alignment: "right",
+  },  {
+    id: "w12",
+    src: "/images/al-quwwa-al-ashira-diverse-projects-riyadh-2025-14.jpeg",
+    tilt: 1.7,
+    alignment: "left",
+  },
+  {
+    id: "w13",
+    src: "/images/al-quwwa-al-ashira-diverse-projects-riyadh-2025-18.jpeg",
+    tilt: 1.7,
+    alignment: "right",
+  },
+   {
+    id: "w14",
+    src: "/images/IMG-20251020-WA0018.jpg",
+    tilt: 1.7,
+    alignment: "left",
+  },
+];
+
 export default function GallerySection() {
+  const [expanded, setExpanded] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
 
-  function scrollBy(dir: "right" | "left") {
-    const el = scrollRef.current;
-    if (!el) return;
-    el.scrollBy({ left: dir === "left" ? -el.clientWidth * 0.7 : el.clientWidth * 0.7, behavior: "smooth" });
-  }
+  const initialCount = 4;
+  const displayedWorks = expanded ? allVisualWorks : allVisualWorks.slice(0, initialCount);
 
-  if (galleryImages.length === 0) return null;
+  const allImages = allVisualWorks.map((w) => w.src);
 
   return (
-    <section id="gallery" className="section bg-[var(--color-surface)] overflow-hidden">
-      <div className="container mb-6 md:mb-8">
-        <div className="flex items-end justify-between gap-4">
-          <Reveal>
-            <p className="section-number mb-3">04</p>
-            <h2 className="text-3xl md:text-4xl font-semibold text-[var(--color-primary)] mb-2">
-              معرض الصور
-            </h2>
-            <div className="divider" />
-          </Reveal>
-
-          {/* Desktop arrows */}
-          <div className="hidden md:flex items-center gap-2 self-end pb-2">
-            <button
-              onClick={() => scrollBy("right")}
-              className="w-10 h-10 border border-[var(--color-border)] flex items-center justify-center hover:bg-[var(--color-primary)] hover:text-white hover:border-[var(--color-primary)] transition-all duration-200"
-              aria-label="السابق"
-            >
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M10 3L5 8l5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-            <button
-              onClick={() => scrollBy("left")}
-              className="w-10 h-10 border border-[var(--color-border)] flex items-center justify-center hover:bg-[var(--color-primary)] hover:text-white hover:border-[var(--color-primary)] transition-all duration-200"
-              aria-label="التالي"
-            >
-              <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                <path d="M6 3l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-          </div>
+    <section
+      id="gallery"
+      className="editorial-section bg-[#faf9f5] overflow-hidden py-16 md:py-24"
+      aria-label="معرض صور الأعمال"
+    >
+      <div className="container">
+        {/* Minimal Section Tag */}
+        <div className="text-center max-w-xl mx-auto mb-16 md:mb-20">
+          <p className="text-xl sm:text-2xl font-serif text-[var(--color-accent)] mb-2 font-medium">
+            معرض الأعمال
+          </p>
+          <div className="w-12 h-px bg-[var(--color-accent)]/50 mx-auto" />
         </div>
-      </div>
 
-      {/* Horizontal rail — spring card entrances */}
-      <div
-        ref={scrollRef}
-        className="h-scroll px-[1.5rem] md:px-[3rem] pb-4 items-end"
-      >
-        {galleryImages.map((src, i) => (
-          <GalleryImage key={i} src={src} index={i} onClick={() => setLightboxIndex(i)} />
-        ))}
-        <div className="w-6 shrink-0" aria-hidden="true" />
-      </div>
+        {/* Alternating Pure Visual Layout (NO TEXT beside images/videos) */}
+        <div className="space-y-20 md:space-y-28">
+          {displayedWorks.map((item, index) => {
+            const isLeaningRight = item.alignment === "right";
 
-      {/* Mobile hint */}
-      <motion.div
-        className="container mt-5 md:hidden"
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ delay: 0.5 }}
-      >
-        <div className="flex items-center gap-2 text-[var(--color-muted)]">
-          <motion.svg
-            width="14" height="14" viewBox="0 0 16 16" fill="none"
-            animate={{ x: [0, 6, 0] }}
-            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            return (
+              <motion.div
+                key={item.id}
+                className="w-full flex"
+                style={{
+                  justifyContent: isLeaningRight ? "flex-start" : "flex-end",
+                }}
+                initial={{ opacity: 0, y: 45 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {/* Large Architectural Frame without text beside it */}
+                <div className="w-full sm:w-11/12 lg:w-9/12 xl:w-8/12">
+                  <EditorialMedia
+                    src={item.src}
+                    videoUrl={item.videoUrl}
+                    alt={`عمل من مشاريع القوة العاشرة ${index + 1}`}
+                    tilt={item.tilt}
+                    aspectRatio="aspect-[16/10] md:aspect-[16/9]"
+                    hoverLabel="انقر للتكبير والمشاهدة"
+                    onClick={() => setLightboxIndex(index)}
+                  />
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* "عرض المزيد" Button */}
+        <div className="text-center mt-16 md:mt-24">
+          <button
+            onClick={() => setExpanded((prev) => !prev)}
+            className="inline-flex items-center gap-3 px-10 py-4 border border-[var(--color-accent)] text-[var(--color-primary)] hover:bg-[var(--color-accent)] hover:text-white rounded-md text-sm font-medium transition-all duration-200 cursor-pointer shadow-xs"
           >
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </motion.svg>
-          <span className="text-[10px] tracking-widest uppercase opacity-40">اسحب لرؤية المزيد</span>
+            <span>{expanded ? "عرض أقل" : "عرض المزيد من الأعمال"}</span>
+            <motion.span
+              animate={{ rotate: expanded ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+              className="text-[var(--color-accent)] group-hover:text-white"
+            >
+              ↓
+            </motion.span>
+          </button>
         </div>
-      </motion.div>
+      </div>
 
-      {/* Lightbox */}
+      {/* Lightbox for full-res image viewing */}
       {lightboxIndex !== null && (
         <Lightbox
-          images={galleryImages}
+          images={allImages}
           initialIndex={lightboxIndex}
           onClose={() => setLightboxIndex(null)}
-          altPrefix="معرض القوة العاشرة"
+          altPrefix="أعمال القوة العاشرة"
         />
       )}
     </section>

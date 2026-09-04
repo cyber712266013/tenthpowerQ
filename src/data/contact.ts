@@ -17,20 +17,18 @@ export interface ContactChannel {
 
 export const contactInfo = {
   // --- البيانات الرسمية ---
-  phone: "+966 50 000 0000",
-  whatsapp: "966500000000",
+  phone: "+966532438253",
+  whatsapp: "966532438253",
   whatsappMessage: "مرحباً، أود الاستفسار عن خدمات ومشاريع مؤسسة القوة العاشرة للمقاولات",
-  email: "info@tenth-power.com",
-  address: "المملكة العربية السعودية، جدة - حي البلد - الشارع الرئيسي أمام مسجد بشير",
+  email: "zjajskryt78@gmail.com",
+  address: "المملكة العربية السعودية، الرياض",
   mapLink: "https://maps.google.com/?q=Jeddah+Saudi+Arabia",
 
   // روابط التواصل الاجتماعي
   social: {
-    instagram: "https://instagram.com/tenthpower_sa",
-    twitter: "https://x.com/tenthpower_sa",
-    linkedin: "https://linkedin.com/company/tenthpower-sa",
-    snapchat: "https://snapchat.com/add/tenthpower_sa",
-    tiktok: "https://tiktok.com/@tenthpower_sa",
+    instagram: "https://www.instagram.com/ZJJ4021",
+    snapchat: "https://www.snapchat.com/add/zjjskryt24?share_id=dOfCOthKqmw&locale=ar-AE",
+    tiktok: "https://www.tiktok.com/@user0532438253?_t=ZS-8zOaCY7q4xg&_r=1",
   },
 
   whatsappBusinessCatalog: "",

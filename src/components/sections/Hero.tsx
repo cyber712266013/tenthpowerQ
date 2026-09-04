@@ -1,174 +1,96 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import companyInfo from "../../data/company";
-
-const SPRING_ROPE = { stiffness: 40, damping: 14, mass: 1.5 };
-
-const fade = (delay = 0) => ({
-  initial: { opacity: 0, y: 22 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.75, delay, ease: [0.22, 1, 0.36, 1] as const },
-});
+import { motion } from "framer-motion";
+import EditorialMedia from "../ui/EditorialMedia";
 
 function scrollTo(id: string) {
   const el = document.getElementById(id);
   if (el) {
-    const top = el.getBoundingClientRect().top + window.scrollY - 72;
+    const top = el.getBoundingClientRect().top + window.scrollY - 80;
     window.scrollTo({ top, behavior: "smooth" });
   }
 }
 
 export default function HeroSection() {
-  const heroRef = useRef<HTMLElement>(null);
-
-  /* Parallax: image moves up as user scrolls down — "rope" spring */
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"],
-  });
-  const rawImgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
-  const imgY = useSpring(rawImgY, SPRING_ROPE);
-
-  /* Content fades out as we scroll past hero */
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const contentY = useTransform(scrollYProgress, [0, 0.5], [0, -30]);
-  const smoothContentY = useSpring(contentY, { stiffness: 80, damping: 20 });
-
   return (
     <section
-      ref={heroRef}
-      id="hero"
-      className="relative min-h-screen flex flex-col justify-center overflow-hidden"
-      aria-label="قسم الترحيب"
+      id="top"
+      className="relative min-h-[92vh] flex items-center bg-[#faf9f5] pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden"
+      aria-label="القسم الرئيسي"
     >
-      {/* Static dark background */}
-      <div className="absolute inset-0 bg-[var(--color-primary)]" aria-hidden="true" />
+      <div className="container relative">
+        <div className="flex flex-row items-center justify-between gap-3 sm:gap-8 lg:gap-14">
 
-      {/* Parallax image — LEFT side on desktop (RTL end), full on mobile */}
-      <div className="absolute inset-0 lg:left-0 lg:right-[45%] overflow-hidden" aria-hidden="true">
-        <motion.img
-          src="/images/hero.png"
-          alt="أعمال مؤسسة القوة العاشرة"
-          className="w-full h-full object-cover opacity-50 lg:opacity-80"
-          style={{ y: imgY, scale: 1.12 }}
-          loading="eager"
-          fetchPriority="high"
-        />
-        {/* Gradient fades toward right (text side) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--color-primary)] via-[var(--color-primary)]/70 to-transparent lg:hidden" />
-        <div className="absolute inset-0 hidden lg:block bg-gradient-to-r from-transparent via-[var(--color-primary)]/15 to-[var(--color-primary)]" />
-        <div className="absolute inset-0 hidden lg:block bg-gradient-to-t from-[var(--color-primary)]/40 via-transparent to-transparent" />
-      </div>
+         
 
-      {/* Content — fades up as you scroll past */}
-      <motion.div
-        className="relative z-10 container pt-28 pb-20 md:pt-36 md:pb-24"
-        style={{ opacity: contentOpacity, y: smoothContentY }}
-      >
-        {/* Text occupies right 65% on desktop */}
-        <div className="lg:w-[65%]">
-
-          {/* Logo emblem — spring bounce in */}
+          {/* Right Side: Editorial Narrative & CTA Buttons */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ type: "spring", stiffness: 100, damping: 18, delay: 0.1 }}
-            className="mb-6"
-          >
-            <img
-              src="/icons/app_logo.webp"
-              alt="شعار مؤسسة القوة العاشرة"
-              className="h-16 md:h-20 w-auto object-contain"
-              style={{ filter: "drop-shadow(0 4px 24px rgba(218,165,32,0.3))" }}
-            />
-          </motion.div>
-
-          {/* Label */}
-          <motion.div {...fade(0.2)} className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/15 text-stone-200 text-xs md:text-sm font-medium mb-5 backdrop-blur-xs">
-            <span className="w-2 h-2 rounded-full bg-[var(--color-accent)] shadow-xs" />
-            <span>مؤسسة القوة العاشرة للمقاولات العامة — جدة</span>
-          </motion.div>
-
-          {/* Heading — clear, large, no overlapping */}
-          <motion.h1
-            initial={{ opacity: 0, y: 25 }}
+            className="w-[48%] sm:w-5/12 text-right"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="text-4xl sm:text-5xl md:text-6xl lg:text-[4.25rem] font-bold text-white leading-[1.3] mb-5 tracking-normal"
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           >
-            نبني <span style={{ color: "var(--color-accent)" }}>بثقة</span>، ونُنجز <span style={{ color: "var(--color-accent)" }}>بخبرة</span>
-          </motion.h1>
+            {/* Title */}
+            <h1 className="text-base sm:text-3xl md:text-5xl lg:text-6xl font-bold text-[var(--color-primary)] tracking-tight leading-tight mb-1 sm:mb-3">
+              القوة العاشرة
+            </h1>
 
-          {/* Subtitle / Description */}
-          <motion.p {...fade(0.5)} className="text-stone-300 text-base sm:text-lg md:text-xl leading-relaxed max-w-xl mb-9 font-normal">
-            شريككم الهندسي الموثوق لتنفيذ المشاريع الإنشائية والمعمارية في المملكة العربية السعودية بمعايير هندسية متقدمة.
-          </motion.p>
+            {/* Subtitle */}
+            <p className="text-xs sm:text-xl md:text-2xl lg:text-3xl font-medium text-[var(--color-accent)] mb-2 sm:mb-4 md:mb-6">
+              رواد الزجاج السكريت، الواجهات والألمنيوم
+            </p>
 
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.65, ease: [0.22, 1, 0.36, 1] }}
-            className="flex flex-wrap items-center gap-4"
-          >
-            <motion.button
-              onClick={() => scrollTo("services")}
-              id="hero-cta-catalog"
-              className="inline-flex items-center gap-2.5 px-8 py-4 bg-white text-[var(--color-primary)] text-sm md:text-base font-bold hover:bg-[var(--color-accent)] hover:text-white transition-all duration-250 shadow-xl"
-              whileHover={{ scale: 1.03, y: -2 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 350, damping: 22 }}
-            >
-              <span>استكشف الكتالوج</span>
-              <svg width="15" height="15" viewBox="0 0 16 16" fill="none">
-                <path d="M8 3v10M3 8l5 5 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </motion.button>
+            {/* Description */}
+            <p className="text-[var(--color-text-secondary)] text-[9px] sm:text-xs md:text-base leading-relaxed font-light mb-3 sm:mb-6 md:mb-8">
+              متخصصون في تنفيذ واجهات الزجاج السكريت، أنظمة الألمنيوم الفاخرة، تفصيل المطابخ العصرية، الديكورات المعمارية والمقاولات العامة والصيانة بأعلى معايير الإتقان والجودة.
+            </p>
 
-            <motion.button
-              onClick={() => scrollTo("contact")}
-              id="hero-cta-contact"
-              className="inline-flex items-center gap-2 px-8 py-4 text-white text-sm md:text-base font-semibold border-2 border-white/30 hover:border-[var(--color-accent)] hover:bg-white/10 transition-all duration-250"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              transition={{ type: "spring", stiffness: 350, damping: 22 }}
-            >
-              <span>تواصل معنا</span>
-            </motion.button>
+            {/* Two Action Buttons */}
+            <div className="flex items-center gap-1.5 sm:gap-4 flex-nowrap sm:flex-wrap">
+              <button
+                onClick={() => scrollTo("projects")}
+                className="px-2.5 py-1.5 sm:px-6 sm:py-3 md:px-8 md:py-3.5 bg-[var(--color-accent)] hover:bg-[var(--color-accent-light)] text-white text-[9px] sm:text-xs md:text-sm font-medium rounded-sm sm:rounded-md shadow-xs transition-all duration-200 cursor-pointer whitespace-nowrap"
+              >
+                استكشف أعمالنا
+              </button>
+
+              <button
+                onClick={() => scrollTo("contact")}
+                className="px-2.5 py-1.5 sm:px-6 sm:py-3 md:px-8 md:py-3.5 border border-[var(--color-accent)] text-[var(--color-primary)] hover:bg-[var(--color-accent)]/10 text-[9px] sm:text-xs md:text-sm font-medium rounded-sm sm:rounded-md transition-all duration-200 cursor-pointer whitespace-nowrap"
+              >
+                تواصل معنا
+              </button>
+            </div>
           </motion.div>
+
+           {/* Left Side: Vertical Counter Indicator + Tilted Architectural Image */}
+          <div className="w-[48%] sm:w-7/12 flex items-center gap-2 sm:gap-6 md:gap-10">
+            {/* Vertical Counter Indicator (01 - 05) */}
+            <div className="flex flex-col items-center gap-1.5 sm:gap-4 text-[9px] sm:text-xs font-light text-[var(--color-muted)] select-none shrink-0">
+              <span className="font-medium text-[var(--color-primary)] text-[10px] sm:text-sm">01</span>
+              <span className="w-px h-8 sm:h-16 bg-[var(--color-border-dark)]" />
+              <span className="text-[var(--color-muted)] text-[9px] sm:text-xs">05</span>
+            </div>
+
+            {/* Tilted Photo Frame */}
+            <motion.div
+              className="flex-1"
+              initial={{ opacity: 0, y: 35 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <EditorialMedia
+                src="/images/Image4.png"
+                alt="مؤسسة القوة العاشرة للمقاولات والتجارة العامة"
+                tilt={-3}
+                aspectRatio="aspect-[16/11] md:aspect-[16/10]"
+                hoverLabel="استكشف مشاريعنا"
+                onClick={() => scrollTo("projects")}
+                priority
+              />
+            </motion.div>
+          </div>
+
         </div>
-      </motion.div>
-
-      {/* Bottom accent line */}
-      <div
-        className="absolute bottom-0 inset-x-0 h-px"
-        style={{ background: "linear-gradient(90deg, var(--color-accent) 0%, transparent 60%)" }}
-        aria-hidden="true"
-      />
-
-      {/* Scroll indicator — bounces */}
-      <motion.div
-        className="absolute bottom-8 right-1/2 translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.6 }}
-        aria-hidden="true"
-      >
-        <span className="text-white/25 text-[9px] tracking-[0.3em] uppercase">scroll</span>
-        <motion.div
-          className="w-px h-10 bg-white/20"
-          animate={{ scaleY: [0, 1, 0], opacity: [0, 1, 0] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
-          style={{ transformOrigin: "top" }}
-        />
-        <motion.svg
-          width="12" height="12" viewBox="0 0 12 12" fill="none"
-          animate={{ y: [0, 5, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
-        >
-          <path d="M2 4l4 4 4-4" stroke="rgba(255,255,255,0.3)" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
-        </motion.svg>
-      </motion.div>
+      </div>
     </section>
   );
 }

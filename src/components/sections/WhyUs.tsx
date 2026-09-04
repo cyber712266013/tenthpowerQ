@@ -1,83 +1,121 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import companyInfo from "../../data/company";
+import { motion } from "framer-motion";
+import EditorialMedia from "../ui/EditorialMedia";
 
 const reasons = [
-  { num: "01", title: "خبرة موثوقة", text: "سنوات من العمل الميداني تمنحنا فهمًا عميقًا لمتطلبات السوق المحلية وتحديات التنفيذ الفعلي." },
-  { num: "02", title: "جودة لا تقبل المساومة", text: "نلتزم بأعلى معايير الجودة في كل مرحلة من مراحل التنفيذ، من التخطيط حتى التسليم." },
-  { num: "03", title: "فريق متخصص", text: "كوادر مؤهلة ومدربة على أحدث أساليب البناء والتشطيب والإدارة الهندسية." },
-  { num: "04", title: "التزام بالمواعيد", text: "نقدّر وقت عملائنا ونلتزم بالجداول الزمنية المتفق عليها دون التنازل عن الجودة." },
-  { num: "05", title: "شفافية كاملة", text: "علاقتنا مع عملائنا مبنية على الوضوح والمصداقية في التعاملات والتقارير والتكاليف." },
-  { num: "06", title: "دعم مستمر", text: "نقف بجانب عملائنا خلال جميع مراحل المشروع وما بعد التسليم بخدمات صيانة متكاملة." },
+  {
+    title: "زجاج سكريت معتمد",
+    text: "زجاج معالج حرارياً بمقاومة فائقة للصدمات والأمان الكامل.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+      </svg>
+    ),
+  },
+  {
+    title: "قطاعات ألمنيوم عازلة",
+    text: "عزل حراري وصوتي ممتاز مع دهانات مقاومة للرطوبة والعوامل الجوية.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <line x1="12" y1="4" x2="12" y2="20" />
+      </svg>
+    ),
+  },
+  {
+    title: "دقة التصنيع والتركيب",
+    text: "أحدث معدات CNC وفريق فني متمرس لتنفيذ أدق التفاصيل الهندسية.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <polyline points="12 6 12 12 16 14" />
+      </svg>
+    ),
+  },
+  {
+    title: "ضمان شامل وصيانة",
+    text: "ضمان موثق على جودة المواد والتركيبات مع خدمة صيانة سريعة.",
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+      </svg>
+    ),
+  },
 ];
 
-/* Spring "rope" config */
-const ROPE = { stiffness: 55, damping: 15, mass: 1.2 };
-
 export default function WhyUsSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  /* Sticky heading parallax */
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  const rawHeadingY = useTransform(scrollYProgress, [0, 1], [-30, 30]);
-  const headingY = useSpring(rawHeadingY, ROPE);
-
   return (
-    <section id="why-us" ref={sectionRef} className="section bg-[var(--color-primary)] overflow-hidden">
-      <div className="container">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+    <section
+      id="why-us"
+      className="editorial-section relative bg-[#faf9f5] overflow-hidden py-16 md:py-28"
+      aria-label="لماذا نحن"
+    >
+      <div className="container relative">
+        <div className="flex flex-row items-center justify-between gap-3 sm:gap-8 lg:gap-14">
 
-          {/* Heading — spring parallax */}
-          <motion.div className="lg:col-span-4 lg:sticky lg:top-28" style={{ y: headingY }}>
-            <motion.div
-              initial={{ opacity: 0, x: -32 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <p className="section-number mb-3">05</p>
-              <h2 className="text-3xl md:text-4xl font-semibold text-white leading-snug mb-4">
-                لماذا<br />
-                <span style={{ color: "var(--color-accent)" }}>القوة العاشرة؟</span>
-              </h2>
-              <div className="divider" />
-              <p className="text-white/50 text-sm mt-5 leading-7 max-w-xs">
-                نؤمن أن الثقة تُبنى عبر الإنجاز والشفافية، وليس فقط الوعود.
-              </p>
-            </motion.div>
+          {/* Left Column: Tag + Title + 2x2 Grid of Features */}
+          <motion.div
+            className="w-[50%] sm:w-6/12 text-right z-10"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {/* Tag */}
+            <p className="text-xs sm:text-lg md:text-2xl font-serif text-[var(--color-accent)] mb-1 sm:mb-2 font-medium">
+              لماذا نحن
+            </p>
+
+            {/* Title */}
+            <h2 className="text-sm sm:text-2xl md:text-4xl lg:text-5xl font-bold text-[var(--color-primary)] tracking-tight leading-tight mb-2 sm:mb-4 md:mb-8">
+              دقة في التصنيع.. وثقة في التنفيذ
+            </h2>
+
+            {/* 2x2 Features Grid */}
+            <div className="grid grid-cols-2 gap-2 sm:gap-4 md:gap-8">
+              {reasons.map((r, i) => (
+                <div key={i} className="flex items-start gap-1.5 sm:gap-3 md:gap-4 text-right">
+                  <div className="w-5 h-5 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full border border-[var(--color-accent)] flex items-center justify-center text-[var(--color-accent)] shrink-0 mt-0.5 [&>svg]:w-3 [&>svg]:h-3 sm:[&>svg]:w-4 sm:[&>svg]:h-4 md:[&>svg]:w-[22px] md:[&>svg]:h-[22px]">
+                    {r.icon}
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-[9px] sm:text-xs md:text-base text-[var(--color-primary)] mb-0.5 sm:mb-1.5 leading-tight">
+                      {r.title}
+                    </h3>
+                    <p className="text-[7px] sm:text-[10px] md:text-sm text-[var(--color-text-secondary)] leading-snug sm:leading-relaxed font-light">
+                      {r.text}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </motion.div>
 
-          {/* Grid — spring-bounce per cell */}
-          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-px bg-white/10">
-            {reasons.map((r, i) => (
-              <motion.div
-                key={r.num}
-                initial={{ opacity: 0, y: 40, scale: 0.95 }}
-                whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                viewport={{ once: true, margin: "-30px" }}
-                transition={{
-                  type: "spring",
-                  stiffness: 70,
-                  damping: 16,
-                  mass: 1,
-                  delay: i * 0.07,
-                }}
-                whileHover={{
-                  backgroundColor: "rgba(255,255,255,0.04)",
-                  transition: { duration: 0.2 },
-                }}
-                className="bg-[var(--color-primary)] p-6 md:p-7 group cursor-default"
-              >
-                <p className="text-[var(--color-accent)] text-sm font-semibold mb-4">{r.num}</p>
-                <h3 className="font-semibold text-white text-base mb-3 group-hover:text-[var(--color-accent)] transition-colors duration-250">
-                  {r.title}
-                </h3>
-                <p className="text-white/45 text-sm leading-6">{r.text}</p>
-              </motion.div>
-            ))}
+          {/* Right Column: Tilted Office Photo + Faint Watermark 04 */}
+          <div className="w-[46%] sm:w-6/12 relative flex items-center justify-center">
+            {/* Faint Giant Watermark 04 */}
+            <div
+              className="watermark-num absolute right-[-1rem] sm:right-[-2rem] md:right-[-4rem] top-1/2 -translate-y-1/2 select-none pointer-events-none z-0"
+              aria-hidden="true"
+            >
+              04
+            </div>
+
+            {/* Tilted Photo */}
+            <motion.div
+              className="w-full relative z-10"
+              initial={{ opacity: 0, y: 35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <EditorialMedia
+                src="/images/Image1.png"
+                alt="معايير الجودة والالتزام في القوة العاشرة"
+                tilt={-2}
+                aspectRatio="aspect-[16/11] md:aspect-[16/10]"
+                hoverLabel="قيمنا المؤسسية"
+              />
+            </motion.div>
           </div>
 
         </div>

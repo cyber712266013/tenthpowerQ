@@ -1,277 +1,308 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { services } from "../../data/services";
 import type { Service } from "../../data/services";
-import { Reveal } from "../ui/Animations";
+import EditorialMedia from "../ui/EditorialMedia";
 
-function ServiceModal({ service, onClose }: { service: Service; onClose: () => void }) {
-  // Prevent scroll behind modal
-  useEffect(() => {
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => { document.body.style.overflow = prev; };
-  }, []);
+const serviceListItems = [
+  {
+    id: "s1",
+    title: "أعمال الزجاج السكريت وقواطع المكاتب",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <path d="M3 9h18" />
+        <path d="M9 21V9" />
+      </svg>
+    ),
+  },
+  {
+    id: "s2",
+    title: "الواجهات الزجاجية المعمارية وكارتن وول",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 21h18" />
+        <path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16" />
+        <line x1="9" y1="7" x2="9" y2="7.01" />
+        <line x1="15" y1="7" x2="15" y2="7.01" />
+        <line x1="9" y1="11" x2="9" y2="11.01" />
+        <line x1="15" y1="11" x2="15" y2="11.01" />
+        <line x1="9" y1="15" x2="9" y2="15.01" />
+        <line x1="15" y1="15" x2="15" y2="15.01" />
+      </svg>
+    ),
+  },
+  {
+    id: "s3",
+    title: "أنظمة وقطاعات ألمنيوم معمارية",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <line x1="12" y1="4" x2="12" y2="20" />
+        <line x1="2" y1="12" x2="22" y2="12" />
+      </svg>
+    ),
+  },
+  {
+    id: "s4",
+    title: "تفصيل مطابخ عصرية حديثة",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" />
+        <path d="M3 15h18" />
+        <circle cx="7.5" cy="9" r="1.5" />
+        <circle cx="16.5" cy="9" r="1.5" />
+        <line x1="9" y1="18" x2="15" y2="18" />
+      </svg>
+    ),
+  },
+  {
+    id: "s5",
+    title: "الديكورات والقواطع المعمارية والمرايا",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+      </svg>
+    ),
+  },
+  {
+    id: "s6",
+    title: "الأبواب والنوافذ والأنظمة الذكية",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="4" y="2" width="16" height="20" rx="1" />
+        <circle cx="8" cy="12" r="1" />
+        <line x1="12" y1="2" x2="12" y2="22" />
+      </svg>
+    ),
+  },
+  {
+    id: "s7",
+    title: "المقاولات العامة والتشطيبات المتكاملة",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M2 20h20" />
+        <path d="M5 20V8l7-5 7 5v12" />
+        <rect x="9" y="13" width="6" height="7" />
+      </svg>
+    ),
+  },
+  {
+    id: "s8",
+    title: "أعمال الصيانة والتشغيل الدورية",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+      </svg>
+    ),
+  },
+  {
+    id: "s9",
+    title: "واجهات الألمنيوم ومداخل الزجاج التجارية",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 21h18" />
+        <path d="M4 21V4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v17" />
+        <path d="M9 21v-8a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v8" />
+      </svg>
+    ),
+  },
+  {
+    id: "s10",
+    title: "درابزينات الستانلس ستيل والزجاج السكريت",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M4 20h16" />
+        <path d="M4 16l5-4 5-4 6-5" />
+        <path d="M9 12v8" />
+        <path d="M14 8v12" />
+      </svg>
+    ),
+  },
+];
 
-  // Close on Escape
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", handler);
-    return () => window.removeEventListener("keydown", handler);
-  }, [onClose]);
-
-  const hasImage = service.coverImage && !service.coverImage.includes("[أضف");
-
+/* ─────────────── Full Services Detail Modal ─────────────── */
+function AllServicesModal({ onClose }: { onClose: () => void }) {
   return (
-    <AnimatePresence>
+    <>
       <motion.div
         className="modal-backdrop"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
         onClick={onClose}
-        role="dialog"
-        aria-modal="true"
-        aria-label={`تفاصيل خدمة ${service.title}`}
       />
-
-      <motion.div
-        className="fixed inset-x-0 bottom-0 md:inset-x-auto md:inset-0 md:flex md:items-center md:justify-center z-[101] p-0 md:p-6"
-        initial={{ y: "100%", opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: "100%", opacity: 0 }}
-        transition={{ type: "spring", stiffness: 280, damping: 32 }}
-      >
-        <div
-          className="relative w-full md:max-w-3xl bg-[var(--color-surface)] overflow-y-auto max-h-[92dvh] md:max-h-[85vh] md:rounded-sm shadow-2xl"
+      <div className="fixed inset-0 z-[101] overflow-y-auto flex items-center justify-center p-4 sm:p-8">
+        <motion.div
+          className="relative w-full max-w-4xl bg-[#faf9f5] border border-[var(--color-border)] p-6 sm:p-10 shadow-2xl overflow-hidden my-auto"
+          initial={{ opacity: 0, y: 40, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 30, scale: 0.98 }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Close */}
           <button
             onClick={onClose}
-            className="absolute top-4 left-4 z-10 w-9 h-9 flex items-center justify-center bg-[var(--color-primary)] text-white hover:bg-[var(--color-accent)] transition-colors"
-            aria-label="إغلاق"
+            className="absolute top-6 left-6 w-10 h-10 flex items-center justify-center bg-[var(--color-primary)] text-white hover:bg-[var(--color-accent)] transition-colors cursor-pointer"
+            aria-label="إغلاق النافذة"
           >
-            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-              <path d="M13 1L1 13M1 1l12 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-            </svg>
+            ✕
           </button>
 
-          {/* Image */}
-          <div className="aspect-[16/7] w-full overflow-hidden bg-[var(--color-surface-2)]">
-            {hasImage ? (
-              <img src={service.coverImage} alt={service.title} className="w-full h-full object-cover" />
-            ) : (
-              <div className="img-placeholder w-full h-full flex-col gap-2">
-                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.75" className="opacity-30">
-                  <rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
-                </svg>
-                <span className="text-xs opacity-40">أضف صورة الخدمة</span>
+          <p className="text-xl font-serif text-[var(--color-accent)] mb-2">دليل الخدمات الشامل</p>
+          <h2 className="text-3xl font-bold text-[var(--color-primary)] mb-6">كافة خدمات القوة العاشرة</h2>
+
+          <div className="space-y-6 divide-y divide-[var(--color-border)] max-h-[65vh] overflow-y-auto pr-2">
+            {services.map((s) => (
+              <div key={s.id} className="pt-6 first:pt-0">
+                <h3 className="text-lg font-bold text-[var(--color-primary)] mb-2 flex items-center gap-2">
+                  <span className="text-[var(--color-accent)] font-semibold">0{s.order}</span>
+                  <span>{s.title}</span>
+                </h3>
+                <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed mb-3">{s.description}</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {s.scope.map((sc, i) => (
+                    <div key={i} className="flex items-center gap-2 text-xs text-[var(--color-muted)]">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] shrink-0" />
+                      <span>{sc}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            )}
+            ))}
           </div>
-
-          {/* Content */}
-          <div className="p-6 md:p-8 lg:p-10">
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <div>
-                <p className="section-number mb-2">خدمة {String(service.order).padStart(2, "0")}</p>
-                <h2 className="text-2xl md:text-3xl font-semibold text-[var(--color-primary)]">{service.title}</h2>
-              </div>
-            </div>
-
-            <div className="w-8 h-px bg-[var(--color-accent)] mb-6" />
-
-            <p className="text-[var(--color-text-secondary)] leading-8 mb-8">{service.description}</p>
-
-            {/* Scope */}
-            <div className="border-t border-[var(--color-border)] pt-6">
-              <p className="text-xs tracking-widest text-[var(--color-muted)] uppercase mb-5">نطاق الخدمة</p>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {service.scope.map((item, i) => (
-                  <li key={i} className="flex items-start gap-3">
-                    <span className="mt-2 w-1.5 h-1.5 rounded-full shrink-0 bg-[var(--color-accent)]" />
-                    <span className="text-sm text-[var(--color-text-secondary)] leading-6">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* CTA */}
-            <div className="mt-8 pt-6 border-t border-[var(--color-border)]">
-              <button
-                onClick={() => {
-                  onClose();
-                  setTimeout(() => {
-                    const el = document.getElementById("contact");
-                    if (el) el.scrollIntoView({ behavior: "smooth" });
-                  }, 350);
-                }}
-                className="inline-flex items-center gap-2 px-7 py-3.5 bg-[var(--color-primary)] text-white text-sm font-medium hover:bg-[var(--color-accent)] transition-colors"
-              >
-                تواصل لطلب هذه الخدمة
-                <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
-                  <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </div>
-      </motion.div>
-    </AnimatePresence>
+        </motion.div>
+      </div>
+    </>
   );
 }
 
 export default function ServicesSection() {
-  const [selected, setSelected] = useState<Service | null>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(2);
 
-  function handleCardClick(service: Service) {
-    setSelected(service);
-  }
+  const displayedServices = serviceListItems.slice(0, visibleCount);
+
+  const handleShowMore = () => {
+    setVisibleCount((prev) => Math.min(prev + 2, serviceListItems.length));
+  };
 
   return (
-    <section id="services" className="section bg-[var(--color-primary)] overflow-hidden pb-8 md:pb-12">
-      <div className="container mb-6 md:mb-8">
-        <Reveal>
-          <p className="section-number mb-3">02</p>
-          <h2 className="text-3xl md:text-4xl font-semibold text-white mb-2">خدماتنا</h2>
-          <div className="divider" />
-          <p className="text-white/50 text-sm max-w-md mt-3">
-            نقدم باقة متكاملة من خدمات المقاولات بمعايير عالية الجودة.
-          </p>
-        </Reveal>
+    <section
+      id="services"
+      className="editorial-section relative bg-[#faf9f5] overflow-hidden py-16 md:py-28"
+      aria-label="خدماتنا"
+    >
+      <div className="container relative">
+        <div className="flex flex-row items-center justify-between gap-3 sm:gap-8 lg:gap-14">
+          
+          {/* Left Column: Text + Services List + Show More Button */}
+          <motion.div
+            className="w-[48%] sm:w-5/12 text-right z-10"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {/* Tag */}
+            <p className="text-xs sm:text-lg md:text-2xl font-serif text-[var(--color-accent)] mb-1 sm:mb-2 font-medium">
+              خدماتنا
+            </p>
+
+            {/* Title */}
+            <h2 className="text-sm sm:text-2xl md:text-4xl lg:text-5xl font-bold text-[var(--color-primary)] tracking-tight leading-tight mb-2 sm:mb-4 md:mb-5">
+              حلول الزجاج، الألمنيوم والديكور المتكاملة
+            </h2>
+
+            {/* Description */}
+            <p className="text-[var(--color-text-secondary)] text-[9px] sm:text-xs md:text-base leading-relaxed font-light mb-3 sm:mb-6 md:mb-8">
+              نقدم حلولاً متكاملة في أعمال الزجاج السكريت، الواجهات المعمارية، قطاعات الألمنيوم، تفصيل المطابخ، الأبواب والنوافذ والمقاولات العامة والصيانة بأعلى معايير الإتقان.
+            </p>
+
+            {/* Services List: Initially 2 services, reveals +2 each click with smooth animation */}
+            <div className="space-y-1.5 sm:space-y-3.5 mb-3 sm:mb-6">
+              <AnimatePresence initial={false}>
+                {displayedServices.map((item, idx) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3, delay: idx >= visibleCount - 2 ? 0.05 : 0 }}
+                    className="flex items-center gap-2 sm:gap-3.5 group cursor-default"
+                  >
+                    <div className="w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full border border-[var(--color-accent)] flex items-center justify-center text-[var(--color-accent)] group-hover:bg-[var(--color-accent)] group-hover:text-white transition-colors duration-200 shrink-0 [&>svg]:w-3 [&>svg]:h-3 sm:[&>svg]:w-4 sm:[&>svg]:h-4 md:[&>svg]:w-[18px] md:[&>svg]:h-[18px]">
+                      {item.icon}
+                    </div>
+                    <span className="text-[9px] sm:text-xs md:text-base font-medium text-[var(--color-primary)] truncate">
+                      {item.title}
+                    </span>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+
+            {/* Actions: "المزيد" button (adds 2 services per click and auto-hides when complete) + "دليل الخدمات الشامل" link */}
+            <div className="flex flex-wrap items-center gap-2 sm:gap-4 pt-1">
+              {visibleCount < serviceListItems.length && (
+                <button
+                  type="button"
+                  onClick={handleShowMore}
+                  className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 py-1 sm:px-3.5 sm:py-1.5 border border-[var(--color-accent)] text-[var(--color-primary)] hover:bg-[var(--color-accent)] hover:text-white text-[9px] sm:text-xs md:text-sm font-semibold transition-all duration-200 cursor-pointer group"
+                  aria-label="عرض المزيد من الخدمات"
+                >
+                  <span>المزيد</span>
+                  <span className="text-[var(--color-accent)] group-hover:text-white transition-transform duration-200 group-hover:translate-y-0.5 text-xs sm:text-sm font-bold">
+                    +
+                  </span>
+                </button>
+              )}
+
+              <button
+                type="button"
+                onClick={() => setModalOpen(true)}
+                className="inline-flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs md:text-sm font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer group whitespace-nowrap"
+              >
+                <span>دليل الخدمات الشامل</span>
+                <span className="text-[var(--color-accent)] transition-transform duration-200 group-hover:-translate-x-1">←</span>
+              </button>
+            </div>
+          </motion.div>
+
+          {/* Right Column: Large Tilted Construction Image + Faint Watermark 02 */}
+          <div className="w-[48%] sm:w-7/12 relative flex items-center justify-center">
+            {/* Faint Giant Watermark 02 in Background */}
+            <div
+              className="watermark-num absolute right-[-1rem] sm:right-[-2rem] md:right-[-4rem] top-1/2 -translate-y-1/2 select-none pointer-events-none z-0"
+              aria-hidden="true"
+            >
+              02
+            </div>
+
+            {/* Tilted Photo */}
+            <motion.div
+              className="w-full relative z-10"
+              initial={{ opacity: 0, y: 35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <EditorialMedia
+                src="/images/hero.png"
+                alt="تنفيذ أعمال الإنشاءات والمقاولات"
+                tilt={-2.5}
+                aspectRatio="aspect-[16/11] md:aspect-[16/10]"
+                hoverLabel="استكشف نطاق الخدمات"
+                onClick={() => setModalOpen(true)}
+              />
+            </motion.div>
+          </div>
+
+        </div>
       </div>
 
-
-      {/* Services Display: Horizontal scroll on mobile / 3-column luxury card grid on desktop */}
-      <div className="container">
-        {/* Mobile: horizontal scroll */}
-        <div
-          ref={scrollRef}
-          className="flex md:hidden h-scroll pb-4 -mx-4 px-4 gap-4"
-        >
-          {services.map((service, i) => (
-            <ServiceCard key={service.id} service={service} index={i} onClick={() => handleCardClick(service)} dark />
-          ))}
-          {/* trailing space */}
-          <div className="w-4 shrink-0" aria-hidden="true" />
-        </div>
-
-        {/* Desktop: 3-column luxury visual grid */}
-        <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {services.map((service, i) => (
-            <ServiceCard key={service.id} service={service} index={i} onClick={() => handleCardClick(service)} dark isGrid />
-          ))}
-        </div>
-      </div>
-
-
-      {/* Modal */}
+      {/* Services Detail Modal */}
       <AnimatePresence>
-        {selected && (
-          <ServiceModal service={selected} onClose={() => setSelected(null)} />
-        )}
+        {modalOpen && <AllServicesModal onClose={() => setModalOpen(false)} />}
       </AnimatePresence>
     </section>
-  );
-}
-
-function ServiceCard({ service, index, onClick, dark, isGrid }: {
-  service: Service; index: number; onClick: () => void; dark?: boolean; isGrid?: boolean;
-}) {
-  const hasImage = service.coverImage && !service.coverImage.includes("[أضف");
-  return (
-    <motion.button
-      initial={{ opacity: 0, y: 50, scale: 0.94 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{
-        type: "spring",
-        stiffness: 65,
-        damping: 16,
-        mass: 1.1,
-        delay: index * 0.09,
-      }}
-      whileHover={{ y: -6, transition: { type: "spring", stiffness: 300, damping: 20 } }}
-      onClick={onClick}
-      className={[
-        "flex flex-col text-right rounded-none overflow-hidden group cursor-pointer text-start",
-        isGrid ? "w-full" : "shrink-0 w-72",
-        "border border-white/10 hover:border-[var(--color-accent)] transition-all duration-300 shadow-lg hover:shadow-[0_12px_30px_rgba(0,0,0,0.35)]",
-        dark ? "bg-[var(--color-primary-light)]" : "bg-[var(--color-surface)]",
-      ].join(" ")}
-      aria-label={`عرض تفاصيل خدمة ${service.title}`}
-    >
-      {/* Image */}
-      <div className="aspect-[4/3] w-full overflow-hidden">
-        {hasImage ? (
-          <img src={service.coverImage} alt={service.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
-        ) : (
-          <div className="img-placeholder w-full h-full" style={{ backgroundColor: "rgba(255,255,255,0.04)", border: "none" }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="0.75">
-              <rect x="3" y="3" width="18" height="18" rx="1"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
-            </svg>
-          </div>
-        )}
-      </div>
-      <div className="p-5 flex-1 flex flex-col">
-        <p className="text-[var(--color-accent)] text-[10px] tracking-widest uppercase mb-2">
-          {String(service.order).padStart(2, "0")}
-        </p>
-        <h3 className="font-semibold text-white text-base mb-2 leading-snug">{service.title}</h3>
-        <p className="text-white/45 text-xs leading-5 flex-1">{service.shortDescription}</p>
-        <p className="mt-4 text-[var(--color-accent)] text-xs tracking-wide flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-          تفاصيل أكثر
-          <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-            <path d="M2 6h8M7 2l4 4-4 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </p>
-      </div>
-    </motion.button>
-  );
-}
-
-function ServiceRow({ service, index, onClick }: {
-  service: Service; index: number; onClick: () => void;
-}) {
-  return (
-    <motion.button
-      initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-30px" }}
-      transition={{ type: "spring", stiffness: 80, damping: 18, delay: index * 0.07 }}
-      onClick={onClick}
-      className="w-full text-right group py-7 flex items-center justify-between gap-6 hover:bg-white/[0.02] transition-colors px-0 cursor-pointer"
-      aria-label={`عرض تفاصيل ${service.title}`}
-    >
-
-      <div className="flex items-center gap-8 flex-1 min-w-0">
-        <span className="text-[var(--color-accent)] text-sm font-medium w-8 shrink-0">
-          {String(service.order).padStart(2, "0")}
-        </span>
-        <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-white text-lg md:text-xl group-hover:text-[var(--color-accent)] transition-colors duration-200">
-            {service.title}
-          </h3>
-          <p className="text-white/40 text-sm mt-1 leading-5 truncate max-w-md">{service.shortDescription}</p>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-6 shrink-0">
-        {/* Scope preview */}
-        <div className="hidden lg:flex gap-2 flex-wrap max-w-xs">
-          {service.scope.slice(0, 2).map((s, i) => (
-            <span key={i} className="text-[10px] text-white/30 border border-white/10 px-2 py-0.5">
-              {s}
-            </span>
-          ))}
-        </div>
-        {/* Arrow */}
-        <div className="w-9 h-9 border border-white/15 flex items-center justify-center group-hover:border-[var(--color-accent)] group-hover:bg-[var(--color-accent)] transition-all duration-200">
-          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="group-hover:text-white text-white/50 transition-colors">
-            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
-      </div>
-    </motion.button>
   );
 }

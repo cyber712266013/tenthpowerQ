@@ -28,8 +28,8 @@ export default function CatalogPage() {
       <AboutSection />
       <ServicesSection />
       <ProjectsSection />
-      <GallerySection />
       <WhyUsSection />
+      <GallerySection />
       <ContactSection />
     </>
   );

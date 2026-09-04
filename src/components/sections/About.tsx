@@ -1,107 +1,84 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import companyInfo from "../../data/company";
-import { Reveal, StaggerGroup, StaggerItem } from "../ui/Animations";
+import { motion } from "framer-motion";
+import EditorialMedia from "../ui/EditorialMedia";
 
-/* Rope spring config */
-const SPRING = { stiffness: 55, damping: 16, mass: 1.1 };
+const stats = [
+  { value: "100%", label: "رضا العملاء" },
+  { value: "+30", label: "كادر متخصص" },
+  { value: "+10", label: "سنوات خبرة" },
+  { value: "+50", label: "مشروع مكتمل" },
+];
 
 export default function AboutSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  /* Parallax for sidebar — moves upward as you scroll down */
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-  const rawY = useTransform(scrollYProgress, [0, 1], [40, -40]);
-  const sidebarY = useSpring(rawY, SPRING);
-
   return (
-    <section id="about" ref={sectionRef} className="section bg-[var(--color-surface)] overflow-hidden">
+    <section
+      id="about"
+      className="editorial-section bg-[#faf9f5] overflow-hidden pt-12 md:pt-20 pb-20 md:pb-28"
+      aria-label="من نحن"
+    >
       <div className="container">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
+        <div className="flex flex-row items-center justify-between gap-3 sm:gap-8 lg:gap-16">
+          
+          {/* Left: Tilted Reception Image + Decorative Dot Matrix */}
+          <div className="w-[48%] sm:w-1/2 relative">
+            {/* Decorative Dot Matrix in Bottom-Left */}
+            <div
+              className="absolute -bottom-3 -left-3 sm:-bottom-6 sm:-left-6 w-16 h-16 sm:w-28 sm:h-28 md:w-36 md:h-36 dot-pattern opacity-80 pointer-events-none z-0"
+              aria-hidden="true"
+            />
 
-          {/* Text — left column */}
-          <div className="lg:col-span-7">
-            <Reveal>
-              <p className="section-number mb-3">01</p>
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-[var(--color-primary)] mb-2 leading-tight">
-                {companyInfo.name}
-              </h2>
-              <div className="divider" />
-            </Reveal>
-
-            <Reveal delay={0.1}>
-              <p className="text-[var(--color-text-secondary)] leading-8 md:text-lg mt-6 mb-8">
-                {companyInfo.description}
-              </p>
-            </Reveal>
-
-            {/* Stats grid */}
-            {companyInfo.stats.some((s) => !s.value.startsWith("[")) && (
-              <StaggerGroup stagger={0.07}>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-px border border-[var(--color-border)]">
-                  {companyInfo.stats.map((stat, i) => (
-                    <StaggerItem key={i}>
-                      <div className="p-5 bg-[var(--color-bg)] text-center">
-                        <p className="text-2xl md:text-3xl font-semibold text-[var(--color-primary)]">
-                          {stat.value}
-                        </p>
-                        <p className="text-xs text-[var(--color-muted)] mt-1">{stat.label}</p>
-                      </div>
-                    </StaggerItem>
-                  ))}
-                </div>
-              </StaggerGroup>
-            )}
-
-            {/* Official info */}
-            <Reveal delay={0.25}>
-              <div className="mt-8 border-t border-[var(--color-border)] pt-6 flex flex-wrap gap-6">
-                {[
-                  { label: "السجل التجاري", value: companyInfo.registrationNumber },
-                  { label: "الرقم الموحد", value: companyInfo.unifiedNumber },
-                  { label: "الموقع", value: companyInfo.locationFull },
-                ].map((item) => (
-                  <div key={item.label}>
-                    <p className="text-[10px] tracking-widest text-[var(--color-muted)] uppercase mb-1">{item.label}</p>
-                    <p className="text-sm font-medium text-[var(--color-primary)]">{item.value}</p>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
+            <motion.div
+              className="relative z-10"
+              initial={{ opacity: 0, y: 35 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-60px" }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <EditorialMedia
+                src="/images/about.png"
+                alt="قواطع زجاج سكريت وأنظمة ألمنيوم من تنفيذ القوة العاشرة"
+                tilt={2.5}
+                aspectRatio="aspect-[16/11] md:aspect-[16/10]"
+                hoverLabel="خبرة متميزة في الزجاج والألمنيوم"
+              />
+            </motion.div>
           </div>
 
-          {/* Sidebar — spring parallax "rope" effect */}
+          {/* Right: Narrative & Statistics */}
           <motion.div
-            className="lg:col-span-5 space-y-0 divide-y divide-[var(--color-border)] border border-[var(--color-border)]"
-            style={{ y: sidebarY }}
+            className="w-[48%] sm:w-1/2 text-right"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           >
-            {[
-              { title: "رؤيتنا", text: companyInfo.vision },
-              { title: "رسالتنا", text: companyInfo.mission },
-              ...companyInfo.values.map((v) => ({ title: v.title, text: v.description })),
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: 24 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
-                transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="p-6"
-              >
-                <div className="flex items-start gap-4">
-                  <span className="text-[var(--color-accent)] font-semibold text-sm w-7 shrink-0 mt-0.5">
-                    {String(i + 1).padStart(2, "0")}
+            {/* Tag */}
+            <p className="text-xs sm:text-lg md:text-2xl font-serif text-[var(--color-accent)] mb-1 sm:mb-2 font-medium">
+              من نحن
+            </p>
+
+            {/* Title */}
+            <h2 className="text-sm sm:text-2xl md:text-4xl lg:text-5xl font-bold text-[var(--color-primary)] tracking-tight leading-tight mb-2 sm:mb-4 md:mb-6">
+              إتقان هندسي في الزجاج والألمنيوم والديكور
+            </h2>
+
+            {/* Description */}
+            <p className="text-[var(--color-text-secondary)] text-[9px] sm:text-xs md:text-base leading-relaxed font-light mb-3 sm:mb-6 md:mb-8">
+              مؤسسة القوة العاشرة رائدة في تنفيذ حلول الزجاج السكريت والواجهات المعمارية، وقطاعات الألمنيوم، وتفصيل المطابخ العصرية، والأبواب والنوافذ والديكورات الداخلية والمقاولات العامة، مع الحرص على أعلى درجات الأمان والجمالية.
+            </p>
+
+            {/* 4 Statistics in a Clean Single Horizontal Row */}
+            <div className="grid grid-cols-4 gap-1 sm:gap-3 md:gap-6 pt-2 sm:pt-4 border-t border-[var(--color-border)]/60">
+              {stats.map((stat, i) => (
+                <div key={i} className="flex flex-col">
+                  <span className="text-xs sm:text-xl md:text-3xl lg:text-4xl font-bold text-[var(--color-primary)] tracking-tight">
+                    {stat.value}
                   </span>
-                  <div>
-                    <h3 className="font-semibold text-[var(--color-primary)] text-sm mb-2">{item.title}</h3>
-                    <p className="text-[var(--color-text-secondary)] text-sm leading-6">{item.text}</p>
-                  </div>
+                  <span className="text-[7px] sm:text-[9px] md:text-xs text-[var(--color-muted)] font-light mt-0.5 sm:mt-1 whitespace-nowrap">
+                    {stat.label}
+                  </span>
                 </div>
-              </motion.div>
-            ))}
+              ))}
+            </div>
           </motion.div>
 
         </div>

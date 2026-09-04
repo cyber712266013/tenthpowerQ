@@ -6,19 +6,19 @@
 
 @layer base {
   :root {
-    --color-primary: #1a1a1a;
-    --color-primary-light: #2d2d2d;
-    --color-accent: #8b6914;
-    --color-accent-light: #b8891a;
-    --color-accent-pale: #f5edd8;
-    --color-bg: #fafaf8;
+    --color-primary: #181817;
+    --color-primary-light: #282725;
+    --color-accent: #a07d4c;
+    --color-accent-light: #b8935e;
+    --color-accent-pale: #f5eedf;
+    --color-bg: #faf9f5;
     --color-surface: #ffffff;
-    --color-surface-2: #f4f4f0;
-    --color-text: #111111;
-    --color-text-secondary: #4a4a4a;
-    --color-muted: #6b6b6b;
-    --color-border: #e4e4e0;
-    --color-border-dark: #c8c8c0;
+    --color-surface-2: #f4f2ea;
+    --color-text: #181817;
+    --color-text-secondary: #58554e;
+    --color-muted: #848077;
+    --color-border: #ede9e0;
+    --color-border-dark: #d8d3c5;
     --font-sans: "IBM Plex Sans Arabic", system-ui, sans-serif;
   }
 
@@ -68,14 +68,15 @@
   .container {
     max-width: 1320px;
     margin-inline: auto;
-    padding-inline: 1.5rem;
+    padding-inline: 0.75rem;
     width: 100%;
   }
 
+  @media (min-width: 640px) { .container { padding-inline: 1.5rem; } }
   @media (min-width: 768px) { .container { padding-inline: 2.5rem; } }
   @media (min-width: 1280px) { .container { padding-inline: 3rem; } }
 
-  .section { padding: 2.75rem 0; }
+  .section { padding: 2rem 0; }
   @media (min-width: 768px) { .section { padding: 3.75rem 0; } }
 
   /* Gold divider */
@@ -107,33 +108,85 @@
     font-size: 0.8rem;
   }
 
-  /* Horizontal scroll container */
-  .h-scroll {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    gap: 1.25rem;
-    padding-block: 0.5rem;
+  /* Editorial magazine layout helpers */
+  .editorial-section {
+    padding-block: 2.25rem;
   }
-  .h-scroll::-webkit-scrollbar { display: none; }
-  .h-scroll > * { scroll-snap-align: start; flex-shrink: 0; }
+  @media (min-width: 768px) {
+    .editorial-section {
+      padding-block: 6.5rem;
+    }
+  }
+
+  .editorial-num {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 0.9;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    font-feature-settings: "tnum";
+  }
+
+  .editorial-image-frame {
+    position: relative;
+    will-change: transform;
+    transform-origin: center center;
+    transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  /* Decorative dot matrix */
+  .dot-pattern {
+    background-image: radial-gradient(var(--color-accent) 1.5px, transparent 1.5px);
+    background-size: 15px 15px;
+  }
+
+  /* Giant faint watermark number in section backgrounds */
+  .watermark-num {
+    font-size: clamp(9rem, 20vw, 22rem);
+    font-weight: 200;
+    line-height: 0.8;
+    color: rgba(160, 125, 76, 0.08);
+    user-select: none;
+    pointer-events: none;
+    font-feature-settings: "tnum";
+  }
 
   /* Modal backdrop */
   .modal-backdrop {
     position: fixed;
     inset: 0;
-    background: rgba(10, 10, 10, 0.85);
-    backdrop-filter: blur(8px);
+    background: rgba(10, 10, 10, 0.88);
+    backdrop-filter: blur(12px);
     z-index: 100;
   }
 
+  /* Suspended Platform Charms — Continuous Physical Pendulum Motion */
+  @keyframes charmPendulum {
+    0% {
+      transform: rotate(var(--swing-max, 6.5deg));
+    }
+    50% {
+      transform: rotate(calc(-1 * var(--swing-max, 6.5deg)));
+    }
+    100% {
+      transform: rotate(var(--swing-max, 6.5deg));
+    }
+  }
+
+  .charm-hanging-pendulum {
+    transform-origin: 50% 0px;
+    animation-name: charmPendulum;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    will-change: transform;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
+    *:not(.charm-hanging-pendulum):not(.charm-hanging-pendulum *) {
       animation-duration: 0.01ms !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
   }
 }
+
+
