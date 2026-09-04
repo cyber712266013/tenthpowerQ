@@ -92,18 +92,45 @@ function ProjectDetailModal({ project, onClose }: { project: Project; onClose: (
               </div>
             </div>
           )}
-          {project.videoUrl && (
-            <div className="border-t border-[var(--color-border)] pt-5 mb-6">
-              <h4 className="text-xs font-semibold text-[var(--color-accent)] uppercase mb-3">توثيق الفيديو:</h4>
-              <div className="aspect-video bg-black overflow-hidden">
-                {parseVideoEmbed(project.videoUrl).type === "file" ? (
-                  <video src={project.videoUrl} controls autoPlay playsInline className="w-full h-full object-cover" />
-                ) : (
-                  <iframe src={parseVideoEmbed(project.videoUrl).embedUrl} className="w-full h-full border-0" allowFullScreen />
-                )}
-              </div>
-            </div>
-          )}
+       {project.videoUrl && (
+  <div className="border-t border-[var(--color-border)] pt-5 mb-6">
+    <h4 className="text-xs font-semibold text-[var(--color-accent)] uppercase mb-3">
+      توثيق الفيديو:
+    </h4>
+
+    <div className="aspect-video bg-black overflow-hidden">
+      {parseVideoEmbed(project.videoUrl).type === "file" ? (
+        <video
+          src={project.videoUrl}
+          controls
+          autoPlay
+          playsInline
+          className="w-full h-full object-cover"
+        />
+      ) : (
+        <iframe
+          src={parseVideoEmbed(project.videoUrl).embedUrl}
+          className="w-full h-full border-0"
+          allowFullScreen
+        />
+      )}
+    </div>
+  </div>
+)}
+
+{/* Bottom Action — داخل نافذة تفاصيل العمل */}
+<div className="border-t border-[var(--color-border)] pt-5 mt-2 flex justify-end">
+  <button
+    onClick={onClose}
+    className="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer group"
+  >
+    <span>العودة إلى جميع الأعمال</span>
+
+    <span className="text-[var(--color-accent)] transition-transform duration-200 group-hover:-translate-x-1">
+      ←
+    </span>
+  </button>
+</div>
         </motion.div>
       </div>
 
@@ -213,7 +240,6 @@ export default function ProjectsSection() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  // Two featured works displayed vertically stacked (تحت بعض)
   const work1 = projects.find((p) => p.coverImage === "/images/Image4.png") || projects.find((p) => p.id === "p2") || projects[1];
   const work2 = projects.find((p) => p.id === "p-spider-villa") || projects[0];
 
@@ -224,114 +250,120 @@ export default function ProjectsSection() {
       aria-label="أعمالنا"
     >
       <div className="container relative">
-        <div className="flex flex-row items-stretch justify-between gap-3 sm:gap-8 lg:gap-14">
 
-          {/* Left Column: Two Featured Works Stacked Vertically (تحت بعض) + Faint Watermark 03 */}
-          <div className="w-[48%] sm:w-7/12 relative flex flex-col items-center justify-between gap-3.5 sm:gap-6 md:gap-8">
-            {/* Giant Faint Watermark 03 on the Left */}
-            <div
-              className="watermark-num absolute left-[-1rem] sm:left-[-2rem] md:left-[-4rem] top-1/2 -translate-y-1/2 select-none pointer-events-none z-0"
-              aria-hidden="true"
-            >
-              03
-            </div>
+        {/* Section Header */}
+        <div className="text-right mb-10 md:mb-14">
+          <p className="text-lg sm:text-2xl font-serif text-[var(--color-accent)] font-medium mb-2">أعمالنا</p>
+          <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-[var(--color-primary)] tracking-tight leading-tight">
+            مشاريع زجاج وألمنيوم نفخر بها
+          </h2>
+        </div>
 
-            {/* Work 1 (Top) - Exact same image, tilt and style as original */}
-            <motion.div
-              className="w-full relative z-10"
-              initial={{ opacity: 0, y: 35 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        {/* Work 1: Image LEFT — Text RIGHT */}
+        <motion.div
+          className="flex flex-row-reverse items-center gap-3 sm:gap-6 md:gap-10 mb-10 md:mb-20"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {/* Image */}
+          <div className="w-[55%] sm:w-7/12">
+            <EditorialMedia
+              src="/images/Image4.png"
+              alt="قواطع زجاج سكريت وأبواب — مقر إداري"
+              tilt={2.5}
+              aspectRatio="aspect-[4/3] sm:aspect-[16/11] md:aspect-[16/10]"
+              hoverLabel="استعراض تفاصيل العمل"
+              onClick={() => setSelectedProject(work1)}
+            />
+          </div>
+          {/* Text beside image */}
+          <div className="w-[45%] sm:w-5/12 text-right space-y-1.5 sm:space-y-3 md:space-y-4">
+            <span className="text-[9px] sm:text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest">زجاج سكريت</span>
+            <h3 className="text-sm sm:text-xl md:text-2xl font-bold text-[var(--color-primary)] leading-snug">
+              {work1?.title || "قواطع زجاج سكريت وأبواب"}
+            </h3>
+            <p className="text-[10px] sm:text-sm text-[var(--color-text-secondary)] leading-relaxed font-light">
+              {work1?.description || "تنفيذ أنظمة زجاج سكريت حديثة لمقر إداري راقٍ، بمعايير عزل صوتي وحراري عالية وتشطيبات فائقة الدقة."}
+            </p>
+            <button
+              onClick={() => setSelectedProject(work1)}
+              className="inline-flex items-center gap-1 sm:gap-2 text-[9px] sm:text-xs font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer group"
             >
-              <EditorialMedia
-                src="/images/Image4.png"
-                alt="قواطع زجاج سكريت وأبواب — مقر إداري"
-                tilt={2.5}
-                aspectRatio="aspect-[16/11] md:aspect-[16/10]"
-                hoverLabel="استعراض تفاصيل العمل"
-                onClick={() => setSelectedProject(work1)}
-              />
-            </motion.div>
+              <span>استعراض تفاصيل العمل</span>
+              <span className="text-[var(--color-accent)] transition-transform duration-200 group-hover:-translate-x-1">←</span>
+            </button>
+          </div>
+        </motion.div>
 
-            {/* Work 2 (Bottom) - Underneath in the exact same format and style (تحتها بنفس الشكل) */}
-            <motion.div
-              className="w-full relative z-10"
-              initial={{ opacity: 0, y: 35 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        {/* Work 2: Image RIGHT — Text LEFT */}
+        <motion.div
+          className="flex flex-row items-center gap-3 sm:gap-6 md:gap-10 mb-10 md:mb-20"
+          initial={{ opacity: 0, y: 35 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {/* Image */}
+          <div className="w-[55%] sm:w-7/12">
+            <EditorialMedia
+              src="/images/image5.png"
+              alt="واجهات سبايدر زجاجية — فيلا بانورامية"
+              tilt={-2.0}
+              aspectRatio="aspect-[4/3] sm:aspect-[16/11] md:aspect-[16/10]"
+              hoverLabel="استعراض تفاصيل العمل"
+              onClick={() => setSelectedProject(work2)}
+            />
+          </div>
+          {/* Text beside image */}
+          <div className="w-[45%] sm:w-5/12 text-right space-y-1.5 sm:space-y-3 md:space-y-4">
+            <span className="text-[9px] sm:text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest">واجهات معمارية</span>
+            <h3 className="text-sm sm:text-xl md:text-2xl font-bold text-[var(--color-primary)] leading-snug">
+              {work2?.title || "واجهات سبايدر زجاجية بانورامية"}
+            </h3>
+            <p className="text-[10px] sm:text-sm text-[var(--color-text-secondary)] leading-relaxed font-light">
+              {work2?.description || "واجهة بانورامية زجاجية بنظام السبايدر لفيلا فاخرة، تتيح إطلالة 180° مع عزل حراري مزدوج وتشطيب ألمنيوم برونزي."}
+            </p>
+            <button
+              onClick={() => setSelectedProject(work2)}
+              className="inline-flex items-center gap-1 sm:gap-2 text-[9px] sm:text-xs font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer group"
             >
-              <EditorialMedia
-                src="/images/image5.png"
-                alt="واجهات سبايدر زجاجية — فيلا بانورامية"
-                tilt={-2.0}
-                aspectRatio="aspect-[16/11] md:aspect-[16/10]"
-                hoverLabel="استعراض تفاصيل العمل"
-                onClick={() => setSelectedProject(work2)}
-              />
-            </motion.div>
+              <span>استعراض تفاصيل العمل</span>
+              <span className="text-[var(--color-accent)] transition-transform duration-200 group-hover:-translate-x-1">←</span>
+            </button>
+          </div>
+        </motion.div>
+
+        {/* Bottom: Category Icons + "View All" Button */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-[var(--color-border)]/80">
+          {/* Category Icons */}
+          <div className="grid grid-cols-4 gap-4 sm:gap-6">
+            {projectCategories.map((cat, i) => (
+              <div key={i} className="flex flex-col items-center gap-1.5 group cursor-default">
+                <div className="text-[var(--color-accent)] group-hover:scale-110 transition-transform duration-200 [&>svg]:w-5 [&>svg]:h-5 md:[&>svg]:w-6 md:[&>svg]:h-6">
+                  {cat.icon}
+                </div>
+                <span className="text-[10px] md:text-xs font-medium text-[var(--color-primary)] whitespace-nowrap">
+                  {cat.label}
+                </span>
+              </div>
+            ))}
           </div>
 
-          {/* Right Column: Narrative distributed along the height of the photos (موزع على مستوى الصور) */}
-          <motion.div
-            className="w-[48%] sm:w-5/12 text-right z-10 flex flex-col justify-between py-1 sm:py-3 md:py-6"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          {/* View All Button */}
+          <button
+            onClick={() => setModalOpen(true)}
+            className="inline-flex items-center gap-2 px-7 py-3 border border-[var(--color-accent)] text-[var(--color-primary)] hover:bg-[var(--color-accent)] hover:text-white text-sm font-medium transition-all duration-200 cursor-pointer"
           >
-            {/* Top Block: Section Tag + Main Heading */}
-            <div className="space-y-1 sm:space-y-2.5 md:space-y-4">
-              <p className="text-xs sm:text-lg md:text-2xl font-serif text-[var(--color-accent)] font-medium">
-                أعمالنا
-              </p>
-
-              <h2 className="text-sm sm:text-2xl md:text-4xl lg:text-5xl font-bold text-[var(--color-primary)] tracking-tight leading-snug sm:leading-tight md:leading-[1.2]">
-                مشاريع زجاج وألمنيوم نفخر بها
-              </h2>
-            </div>
-
-            {/* Middle Block: Narrative with comfortable line spacing & action link */}
-            <div className="my-auto py-2 sm:py-5 md:py-8 space-y-2 sm:space-y-5 md:space-y-7">
-              <p className="text-[var(--color-text-secondary)] text-[9px] sm:text-xs md:text-base leading-relaxed sm:leading-loose md:leading-[2.2] font-light">
-                نماذج حية من أعمالنا المنفذة في واجهات الزجاج السكريت، أنظمة الألمنيوم المعمارية، تفصيل المطابخ العصرية، الديكورات المعمارية والمقاولات العامة بنظام تسليم المفتاح.
-              </p>
-
-              <p className="hidden sm:block text-[var(--color-text-secondary)] text-xs md:text-sm leading-relaxed sm:leading-loose font-light opacity-90">
-                نحرص في كل مشروع على توظيف أجود المواد المعزولة حرارياً ومائياً وتطبيق أدق المعايير الهندسية لكود البناء السعودي لضمان الفخامة والاستدامة.
-              </p>
-
-              <div>
-                <button
-                  onClick={() => setModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs md:text-sm font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer group whitespace-nowrap"
-                >
-                  <span>استعراض جميع الأعمال</span>
-                  <span className="text-[var(--color-accent)] transition-transform duration-200 group-hover:-translate-x-1">←</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Bottom Block: 4 Category Icons aligned with the bottom of the photos */}
-            <div className="grid grid-cols-4 gap-1.5 sm:gap-3 md:gap-4 pt-3 sm:pt-5 md:pt-8 border-t border-[var(--color-border)]/80 text-center">
-              {projectCategories.map((cat, i) => (
-                <div key={i} className="flex flex-col items-center gap-1 sm:gap-2 group cursor-default">
-                  <div className="text-[var(--color-accent)] group-hover:scale-110 transition-transform duration-200 [&>svg]:w-4 [&>svg]:h-4 sm:[&>svg]:w-5 sm:[&>svg]:h-5 md:[&>svg]:w-6 md:[&>svg]:h-6">
-                    {cat.icon}
-                  </div>
-                  <span className="text-[7px] sm:text-[10px] md:text-xs font-medium text-[var(--color-primary)] whitespace-nowrap">
-                    {cat.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
+            <span>استعراض جميع الأعمال</span>
+            <span>←</span>
+          </button>
         </div>
+
       </div>
 
-      {/* Single Project Detail Overlay (when clicking on either of the two works) */}
+      {/* Single Project Detail Overlay */}
       <AnimatePresence>
         {selectedProject && (
           <ProjectDetailModal project={selectedProject} onClose={() => setSelectedProject(null)} />

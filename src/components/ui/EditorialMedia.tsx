@@ -95,7 +95,7 @@ export default function EditorialMedia({
         }
       }}
     >
-      <div className={`relative w-full ${aspectRatio} overflow-hidden bg-black/40`}>
+      <div className={`relative w-full overflow-hidden bg-black/5`} style={{ maxHeight: '70vh' }}>
         {/* Case 1: Direct video file (.mp4, etc.) -> Ambient looping video */}
         {hasVideo && isFileVideo ? (
           <>
@@ -107,7 +107,7 @@ export default function EditorialMedia({
               muted
               loop
               playsInline
-              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              className="w-full h-auto max-h-[70vh] object-contain transition-transform duration-700 ease-out group-hover:scale-[1.02]"
             />
 
             {/* Sound toggle button */}
@@ -157,7 +157,7 @@ export default function EditorialMedia({
               <img
                 src={src}
                 alt={alt}
-                className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                className="w-full h-auto max-h-[70vh] object-contain block transition-transform duration-700 ease-out group-hover:scale-[1.02]"
                 loading={priority ? "eager" : "lazy"}
               />
             ) : (
