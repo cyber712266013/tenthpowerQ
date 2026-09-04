@@ -46,7 +46,7 @@ export default function WhyUsSection() {
   return (
     <section
       id="why-us"
-      className="editorial-section relative bg-[#faf9f5] overflow-hidden py-16 md:py-28"
+      className="editorial-section relative bg-[#faf9f5] overflow-hidden py-8 sm:py-12 md:py-16"
       aria-label="لماذا نحن"
     >
       <div className="container relative">

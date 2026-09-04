@@ -220,7 +220,7 @@ export default function ProjectsSection() {
   return (
     <section
       id="projects"
-      className="editorial-section relative bg-[#faf9f5] overflow-hidden py-16 md:py-28"
+      className="editorial-section relative bg-[#faf9f5] overflow-hidden py-8 sm:py-12 md:py-16"
       aria-label="أعمالنا"
     >
       <div className="container relative">

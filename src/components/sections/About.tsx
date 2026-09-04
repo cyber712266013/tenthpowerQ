@@ -7,7 +7,7 @@ export default function AboutSection() {
   return (
     <section
       id="about"
-      className="editorial-section bg-[#faf9f5] overflow-hidden pt-12 md:pt-20 pb-20 md:pb-28"
+      className="editorial-section bg-[#faf9f5] overflow-hidden pt-6 sm:pt-10 md:pt-14 pb-8 sm:pb-12 md:pb-16"
       aria-label="من نحن"
     >
       <div className="container">
