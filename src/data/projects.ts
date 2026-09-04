@@ -40,7 +40,7 @@ export const projects: Project[] = [
     title: "واجهات زجاجية كارتن وول — مركز أعمال",
     category: "زجاج وواجهات",
     categorySlug: "glass",
-    location: "جدة، طريق الملك",
+    location: "الرياض",
     year: "2024",
     shortDescription: "تنفيذ واجهات زجاجية كارتن وول واستركشر عازلة للحرارة لمبنى إداري وتجاري متكامل.",
     description:
@@ -66,7 +66,7 @@ export const projects: Project[] = [
     title: "قواطع زجاج سكريت وأبواب سحاب لمقر إداري",
     category: "زجاج وواجهات",
     categorySlug: "glass",
-    location: "جدة، حي الروضة",
+    location: "الرياض",
     year: "2024",
     shortDescription: "تنفيذ قواطع زجاج سكريت 12 ملم وأبواب سحاب بإطارات ألمنيوم سوداء فاخرة لمقر تنفيذي.",
     description:
@@ -91,7 +91,7 @@ export const projects: Project[] = [
     title: "تصميم وتنفيذ مطبخ ألمنيوم عصري لفيلا فاخرة",
     category: "مطابخ وديكورات",
     categorySlug: "kitchens",
-    location: "جدة، حي الشاطئ",
+    location: "الرياض",
     year: "2024",
     shortDescription: "تفصيل مطبخ ألمنيوم حديث مع جزيرة رخامية وإكسسوارات هيدروليكية كاملة.",
     description:

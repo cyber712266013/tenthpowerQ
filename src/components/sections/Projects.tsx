@@ -219,7 +219,7 @@ function AllProjectsModal({ onClose }: { onClose: () => void }) {
                 <h3 className="font-bold text-sm text-[var(--color-primary)] group-hover:text-[var(--color-accent)] transition-colors">
                   {p.title}
                 </h3>
-                <p className="text-xs text-[var(--color-muted)] mt-1">{p.location || "جدة"} • {p.year}</p>
+                <p className="text-xs text-[var(--color-muted)] mt-1">{p.location || "الرياض"} • {p.year}</p>
               </div>
             ))}
           </div>

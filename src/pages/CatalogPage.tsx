@@ -11,14 +11,17 @@ export default function CatalogPage() {
   return (
     <>
       <Helmet>
-        <title>القوة العاشرة | الكتالوج الإلكتروني المؤسسي</title>
+        <title>مؤسسة القوة العاشرة للمقاولات والتجارة العامة</title>
         <meta
           name="description"
-          content="مؤسسة القوة العاشرة للمقاولات العامة — كتالوج مؤسسي شامل يضم خدماتنا وأعمالنا في البناء والتشطيبات والبنية التحتية. جدة، المملكة العربية السعودية."
+          content="مؤسسة القوة العاشرة للمقاولات والتجارة العامة — كتالوج مؤسسي شامل يضم خدماتنا وأعمالنا في الزجاج السكريت، الواجهات المعمارية، وقطاعات الألمنيوم. الرياض، المملكة العربية السعودية."
         />
-        <meta property="og:title" content="القوة العاشرة | الكتالوج الإلكتروني المؤسسي" />
-        <meta property="og:description" content="مؤسسة القوة العاشرة للمقاولات العامة — خبرة في البناء والتشطيبات والبنية التحتية." />
-        <meta property="og:image" content="/icons/app_logo_round.webp" />
+        <meta property="og:title" content="مؤسسة القوة العاشرة للمقاولات والتجارة العامة" />
+        <meta
+          property="og:description"
+          content="إبداع الزجاج والألمنيوم ودقة المقاولات العامة. تصفح الكتالوج الإلكتروني وسابقة الأعمال."
+        />
+        <meta property="og:image" content="/og-image.jpg" />
         <meta property="og:type" content="website" />
         <meta property="og:locale" content="ar_SA" />
         <link rel="canonical" href="/" />

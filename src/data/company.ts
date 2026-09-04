@@ -14,9 +14,9 @@ export const companyInfo = {
   unifiedNumber: "٧٠١٢٤٢١٧٢٨",
 
   // الموقع
-  location: "جدة، حي البلد",
+  location: "الرياض",
   locationFull: "الرياض",
-  city: "جدة",
+  city: "الرياض",
   country: "المملكة العربية السعودية",
   // الرؤية والرسالة
   vision:

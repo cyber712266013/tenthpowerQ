@@ -79,7 +79,7 @@ const channels: SuspendedChannel[] = [
   {
     id: "maps",
     title: "المقر الرئيسي",
-    subtitle: "جدة - البلد",
+    subtitle: "الرياض",
     handle: "خرائط Google",
     url: contactInfo.mapLink,
     type: "maps",
