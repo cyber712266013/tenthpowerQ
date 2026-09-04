@@ -99,7 +99,7 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden text-black rounded-t-3xl md:rounded-t-[3.5rem] pt-16 pb-16 md:pt-24 md:pb-24 mt-12 md:mt-20 border-t border-black shadow-2xl"
+      className="relative overflow-hidden text-black rounded-t-3xl md:rounded-t-[3.5rem] pt-8 pb-10 sm:pt-14 sm:pb-16 md:pt-20 md:pb-20 mt-6 sm:mt-10 md:mt-16 border-t border-black shadow-2xl"
     >
       <div className="container relative z-10">
         {/* Header Section */}
