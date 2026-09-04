@@ -117,7 +117,7 @@ export default function GallerySection() {
   return (
     <section
       id="gallery"
-      className="editorial-section bg-[#faf9f5] overflow-hidden py-16 md:py-24"
+      className="editorial-section bg-[#faf9f5] overflow-hidden py-8 sm:py-12 md:py-16"
       aria-label="معرض صور الأعمال"
     >
       <div className="container">
