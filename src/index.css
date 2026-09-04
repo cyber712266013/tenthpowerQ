@@ -1,0 +1,139 @@
+@import "tailwindcss";
+
+/* ===================================================
+   Design System — القوة العاشرة — Luxury Catalog
+   =================================================== */
+
+@layer base {
+  :root {
+    --color-primary: #1a1a1a;
+    --color-primary-light: #2d2d2d;
+    --color-accent: #8b6914;
+    --color-accent-light: #b8891a;
+    --color-accent-pale: #f5edd8;
+    --color-bg: #fafaf8;
+    --color-surface: #ffffff;
+    --color-surface-2: #f4f4f0;
+    --color-text: #111111;
+    --color-text-secondary: #4a4a4a;
+    --color-muted: #6b6b6b;
+    --color-border: #e4e4e0;
+    --color-border-dark: #c8c8c0;
+    --font-sans: "IBM Plex Sans Arabic", system-ui, sans-serif;
+  }
+
+  *,*::before,*::after { box-sizing: border-box; }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    direction: rtl;
+    text-align: right;
+    line-height: 1.7;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  h1,h2,h3,h4,h5,h6 {
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: 0;
+  }
+
+  img { max-width: 100%; height: auto; display: block; }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection { background-color: var(--color-accent); color: white; }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--color-bg); }
+  ::-webkit-scrollbar-thumb { background: var(--color-border-dark); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--color-muted); }
+}
+
+@layer utilities {
+  .container {
+    max-width: 1320px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+    width: 100%;
+  }
+
+  @media (min-width: 768px) { .container { padding-inline: 2.5rem; } }
+  @media (min-width: 1280px) { .container { padding-inline: 3rem; } }
+
+  .section { padding: 2.75rem 0; }
+  @media (min-width: 768px) { .section { padding: 3.75rem 0; } }
+
+  /* Gold divider */
+  .divider {
+    width: 2.5rem;
+    height: 1.5px;
+    background-color: var(--color-accent);
+    margin-block: 1.25rem;
+  }
+
+  /* Section number label */
+  .section-number {
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.25em;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    font-feature-settings: "tnum";
+  }
+
+  /* Image placeholder */
+  .img-placeholder {
+    background-color: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+  }
+
+  /* Horizontal scroll container */
+  .h-scroll {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 1.25rem;
+    padding-block: 0.5rem;
+  }
+  .h-scroll::-webkit-scrollbar { display: none; }
+  .h-scroll > * { scroll-snap-align: start; flex-shrink: 0; }
+
+  /* Modal backdrop */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
