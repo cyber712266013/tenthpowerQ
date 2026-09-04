@@ -13,7 +13,7 @@ export default function HeroSection() {
   return (
     <section
       id="top"
-      className="relative min-h-[92vh] flex items-center bg-[#faf9f5] pt-24 pb-16 md:pt-32 md:pb-24 overflow-hidden"
+      className="relative flex items-center bg-[#faf9f5] pt-16 pb-6 sm:pt-24 sm:pb-12 md:pt-28 md:pb-16 overflow-hidden"
       aria-label="القسم الرئيسي"
     >
       <div className="container relative">

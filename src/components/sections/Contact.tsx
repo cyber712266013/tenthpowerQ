@@ -99,7 +99,7 @@ export default function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden bg-[#181817] text-white rounded-t-3xl md:rounded-t-[3.5rem] pt-16 pb-16 md:pt-24 md:pb-24 mt-12 md:mt-20 border-t border-white/10 shadow-2xl"
+      className="relative overflow-hidden text-black rounded-t-3xl md:rounded-t-[3.5rem] pt-16 pb-16 md:pt-24 md:pb-24 mt-12 md:mt-20 border-t border-black shadow-2xl"
     >
       <div className="container relative z-10">
         {/* Header Section */}
@@ -108,11 +108,11 @@ export default function ContactSection() {
             <p className="text-xs sm:text-lg md:text-2xl font-serif text-[var(--color-accent)] mb-1 sm:mb-2 font-medium">
               تواصل معنا
             </p>
-            <h2 className="text-base sm:text-2xl md:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-2 sm:mb-3">
+            <h2 className="text-base sm:text-2xl md:text-4xl lg:text-5xl font-bold tracking-tight text-black mb-2 sm:mb-3">
               يسعدنا التعاون معك في مشروعك القادم
             </h2>
             <div className="w-10 sm:w-16 h-[1.5px] sm:h-[2px] bg-[var(--color-accent)] mx-auto mb-2 sm:mb-4" />
-            <p className="text-white/60 text-[10px] sm:text-xs md:text-base leading-relaxed font-light">
+            <p className="text-black/60 text-[10px] sm:text-xs md:text-base leading-relaxed font-light">
               انقر على أيقونة المنصة للتواصل المباشر.
             </p>
           </Reveal>
@@ -131,11 +131,11 @@ export default function ContactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="mt-8 sm:mt-12 md:mt-16 p-3 sm:p-6 md:p-8 rounded-xl border border-white/10 bg-white/[0.03] backdrop-blur-md flex flex-row items-center justify-between gap-3 relative overflow-hidden"
+          className="mt-8 sm:mt-12 md:mt-16 p-3 sm:p-6 md:p-8 rounded-xl border border-black/10 bg-white/[0.03] backdrop-blur-md flex flex-row items-center justify-between gap-3 relative overflow-hidden"
         >
           <div className="absolute top-0 right-0 w-1 sm:w-1.5 h-full bg-[var(--color-accent)]" />
           <div className="flex items-center gap-2.5 sm:gap-4 text-right">
-            <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-white/10 border border-[var(--color-accent)]/40 flex items-center justify-center shrink-0 text-[var(--color-accent)] shadow-sm [&>svg]:w-4 [&>svg]:h-4 sm:[&>svg]:w-[22px] sm:[&>svg]:h-[22px]">
+            <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-black/10 border border-[var(--color-accent)]/40 flex items-center justify-center shrink-0 text-[var(--color-accent)] shadow-sm [&>svg]:w-4 [&>svg]:h-4 sm:[&>svg]:w-[22px] sm:[&>svg]:h-[22px]">
               <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7">
                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
                 <circle cx="12" cy="10" r="3" />
@@ -145,7 +145,7 @@ export default function ContactSection() {
               <p className="text-[9px] sm:text-[11px] text-[var(--color-accent)] uppercase tracking-wider font-semibold">
                 المقر الرئيسي والمكتب الهندسي
               </p>
-              <p className="text-[10px] sm:text-sm md:text-base text-white/90 font-medium mt-0.5">
+              <p className="text-[10px] sm:text-sm md:text-base text-black/90 font-medium mt-0.5">
                 {contactInfo.address}
               </p>
             </div>

@@ -1,12 +1,7 @@
 import { motion } from "framer-motion";
 import EditorialMedia from "../ui/EditorialMedia";
 
-const stats = [
-  { value: "100%", label: "رضا العملاء" },
-  { value: "+30", label: "كادر متخصص" },
-  { value: "+10", label: "سنوات خبرة" },
-  { value: "+50", label: "مشروع مكتمل" },
-];
+
 
 export default function AboutSection() {
   return (
@@ -66,19 +61,7 @@ export default function AboutSection() {
               مؤسسة القوة العاشرة رائدة في تنفيذ حلول الزجاج السكريت والواجهات المعمارية، وقطاعات الألمنيوم، وتفصيل المطابخ العصرية، والأبواب والنوافذ والديكورات الداخلية والمقاولات العامة، مع الحرص على أعلى درجات الأمان والجمالية.
             </p>
 
-            {/* 4 Statistics in a Clean Single Horizontal Row */}
-            <div className="grid grid-cols-4 gap-1 sm:gap-3 md:gap-6 pt-2 sm:pt-4 border-t border-[var(--color-border)]/60">
-              {stats.map((stat, i) => (
-                <div key={i} className="flex flex-col">
-                  <span className="text-xs sm:text-xl md:text-3xl lg:text-4xl font-bold text-[var(--color-primary)] tracking-tight">
-                    {stat.value}
-                  </span>
-                  <span className="text-[7px] sm:text-[9px] md:text-xs text-[var(--color-muted)] font-light mt-0.5 sm:mt-1 whitespace-nowrap">
-                    {stat.label}
-                  </span>
-                </div>
-              ))}
-            </div>
+          
           </motion.div>
 
         </div>
