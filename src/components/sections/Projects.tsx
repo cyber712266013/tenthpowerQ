@@ -400,15 +400,25 @@ function getTwoRandomProjects(items: Project[]): [Project | undefined, Project |
   }
   return [items[firstIndex], items[secondIndex]];
 }
+function getRandomProjects(items: Project[], count: number): Project[] {
+  if (!items || items.length === 0) return [];
+
+  // نسخ المصفوفة ثم خلطها عشوائياً
+  const shuffled = [...items].sort(() => Math.random() - 0.5);
+
+  // أخذ العدد المطلوب، أو كل المشاريع إذا كان العدد أقل
+  return shuffled.slice(0, Math.min(count, items.length));
+}
 
 export default function ProjectsSection() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
   // اختيار مشروعين عشوائيين مختلفين عند تحميل الصفحة
-  const [[work1, work2]] = useState<[Project | undefined, Project | undefined]>(() =>
-    getTwoRandomProjects(projects)
-  );
+const [randomProjects] = useState<Project[]>(() =>
+  getRandomProjects(projects, 4)
+);
+  
 
   return (
     <section
@@ -426,183 +436,114 @@ export default function ProjectsSection() {
           </h2>
         </div>
 
-        {/* Work 1: Image LEFT — Text RIGHT */}
-        {work1 && (
-          <motion.div
-            className="flex flex-row-reverse items-stretch gap-4 sm:gap-8 md:gap-12 mb-12 md:mb-24"
-            initial={{ opacity: 0, y: 35 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {/* Image */}
-            <div className="w-[52%] sm:w-1/2 lg:w-7/12 flex items-center">
-              <div className="w-full">
-                <EditorialMedia
-                  src={work1.coverImage || work1.images?.[0]}
-                  videoUrl={work1.videoUrl}
-                  alt={work1.title}
-                  tilt={2.5}
-                  aspectRatio="aspect-[4/3] sm:aspect-[16/11] md:aspect-[16/10]"
-                  hoverLabel="استعراض تفاصيل العمل"
-                  onClick={() => setSelectedProject(work1)}
-                />
-              </div>
-            </div>
+       {/* Random Projects */}
+{randomProjects.map((project, index) => {
+  const isEven = index % 2 === 0;
 
-            {/* Text beside image */}
-            <div className="w-[48%] sm:w-1/2 lg:w-5/12 text-right self-stretch flex flex-col justify-between py-1 sm:py-3 md:py-6">
-              {/* Top: Category & Title */}
-              <div className="space-y-2 sm:space-y-3">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-block text-[10px] sm:text-xs md:text-sm font-semibold text-[var(--color-accent)] uppercase tracking-wider bg-[var(--color-accent)]/10 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
-                    {work1.category}
-                  </span>
-                  {work1.year && (
-                    <span className="text-[10px] sm:text-xs text-[var(--color-muted)] font-medium">
-                      {work1.year}
-                    </span>
-                  )}
-                  {work1.location && (
-                    <>
-                      <span className="text-[10px] sm:text-xs text-[var(--color-muted)]">•</span>
-                      <span className="text-[10px] sm:text-xs text-[var(--color-muted)]">
-                        {work1.location}
-                      </span>
-                    </>
-                  )}
-                </div>
+  return (
+    <motion.div
+      key={project.id}
+      className={`flex items-stretch gap-4 sm:gap-8 md:gap-12 mb-12 md:mb-24 ${
+        isEven ? "flex-row-reverse" : "flex-row"
+      }`}
+      initial={{ opacity: 0, y: 35 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{
+        duration: 0.8,
+        delay: index * 0.15,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+    >
+      {/* Image */}
+      <div className="w-[52%] sm:w-1/2 lg:w-7/12 flex items-center">
+        <div className="w-full">
+          <EditorialMedia
+            src={project.coverImage || project.images?.[0]}
+            videoUrl={project.videoUrl}
+            alt={project.title}
+            tilt={isEven ? 2.5 : -2.0}
+            aspectRatio="aspect-[4/3] sm:aspect-[16/11] md:aspect-[16/10]"
+            hoverLabel="استعراض تفاصيل العمل"
+            onClick={() => setSelectedProject(project)}
+          />
+        </div>
+      </div>
 
-                <h3 className="text-base sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--color-primary)] leading-snug sm:leading-tight tracking-tight">
-                  {work1.title}
-                </h3>
-              </div>
+      {/* Text */}
+      <div className="w-[48%] sm:w-1/2 lg:w-5/12 text-right self-stretch flex flex-col justify-between py-1 sm:py-3 md:py-6">
 
-              {/* Middle: Rich Description & Scope Highlights */}
-              <div className="my-auto py-2 sm:py-4 space-y-2.5 sm:space-y-3.5">
-                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-[var(--color-text-secondary)] leading-relaxed sm:leading-loose font-light">
-                  {work1.description || work1.shortDescription}
-                </p>
+        {/* Category & Title */}
+        <div className="space-y-2 sm:space-y-3">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="inline-block text-[10px] sm:text-xs md:text-sm font-semibold text-[var(--color-accent)] uppercase tracking-wider bg-[var(--color-accent)]/10 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
+              {project.category}
+            </span>
 
-                {work1.scope && work1.scope.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
-                    {work1.scope.slice(0, 3).map((item, idx) => (
-                      <span
-                        key={idx}
-                        className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs text-[var(--color-text-secondary)] bg-white/90 border border-[var(--color-border)] px-2.5 py-1 rounded-md shadow-2xs"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] shrink-0" />
-                        <span className="line-clamp-1">{item}</span>
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
+            {project.year && (
+              <span className="text-[10px] sm:text-xs text-[var(--color-muted)] font-medium">
+                {project.year}
+              </span>
+            )}
 
-              {/* Bottom: Action CTA */}
-              <div className="pt-2">
-                <button
-                  onClick={() => setSelectedProject(work1)}
-                  className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white text-xs sm:text-sm font-semibold rounded-md transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer group"
+            {project.location && (
+              <>
+                <span className="text-[10px] sm:text-xs text-[var(--color-muted)]">
+                  •
+                </span>
+
+                <span className="text-[10px] sm:text-xs text-[var(--color-muted)]">
+                  {project.location}
+                </span>
+              </>
+            )}
+          </div>
+
+          <h3 className="text-base sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--color-primary)] leading-snug sm:leading-tight tracking-tight">
+            {project.title}
+          </h3>
+        </div>
+
+        {/* Description & Scope */}
+        <div className="my-auto py-2 sm:py-4 space-y-2.5 sm:space-y-3.5">
+          <p className="text-xs sm:text-sm md:text-base lg:text-lg text-[var(--color-text-secondary)] leading-relaxed sm:leading-loose font-light">
+            {project.description || project.shortDescription}
+          </p>
+
+          {project.scope && project.scope.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
+              {project.scope.slice(0, 3).map((item, idx) => (
+                <span
+                  key={idx}
+                  className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs text-[var(--color-text-secondary)] bg-white/90 border border-[var(--color-border)] px-2.5 py-1 rounded-md shadow-2xs"
                 >
-                  <span>استعراض تفاصيل العمل</span>
-                  <span className="text-[var(--color-accent)] group-hover:text-white transition-all duration-300 group-hover:-translate-x-1.5">
-                    ←
-                  </span>
-                </button>
-              </div>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] shrink-0" />
+                  <span className="line-clamp-1">{item}</span>
+                </span>
+              ))}
             </div>
-          </motion.div>
-        )}
+          )}
+        </div>
 
-        {/* Work 2: Image RIGHT — Text LEFT */}
-        {work2 && (
-          <motion.div
-            className="flex flex-row items-stretch gap-4 sm:gap-8 md:gap-12 mb-12 md:mb-24"
-            initial={{ opacity: 0, y: 35 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-60px" }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+        {/* Button */}
+        <div className="pt-2">
+          <button
+            onClick={() => setSelectedProject(project)}
+            className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white text-xs sm:text-sm font-semibold rounded-md transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer group"
           >
-            {/* Image */}
-            <div className="w-[52%] sm:w-1/2 lg:w-7/12 flex items-center">
-              <div className="w-full">
-                <EditorialMedia
-                  src={work2.coverImage || work2.images?.[0]}
-                  videoUrl={work2.videoUrl}
-                  alt={work2.title}
-                  tilt={-2.0}
-                  aspectRatio="aspect-[4/3] sm:aspect-[16/11] md:aspect-[16/10]"
-                  hoverLabel="استعراض تفاصيل العمل"
-                  onClick={() => setSelectedProject(work2)}
-                />
-              </div>
-            </div>
+            <span>استعراض تفاصيل العمل</span>
 
-            {/* Text beside image */}
-            <div className="w-[48%] sm:w-1/2 lg:w-5/12 text-right self-stretch flex flex-col justify-between py-1 sm:py-3 md:py-6">
-              {/* Top: Category & Title */}
-              <div className="space-y-2 sm:space-y-3">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <span className="inline-block text-[10px] sm:text-xs md:text-sm font-semibold text-[var(--color-accent)] uppercase tracking-wider bg-[var(--color-accent)]/10 px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full">
-                    {work2.category}
-                  </span>
-                  {work2.year && (
-                    <span className="text-[10px] sm:text-xs text-[var(--color-muted)] font-medium">
-                      {work2.year}
-                    </span>
-                  )}
-                  {work2.location && (
-                    <>
-                      <span className="text-[10px] sm:text-xs text-[var(--color-muted)]">•</span>
-                      <span className="text-[10px] sm:text-xs text-[var(--color-muted)]">
-                        {work2.location}
-                      </span>
-                    </>
-                  )}
-                </div>
+            <span className="text-[var(--color-accent)] group-hover:text-white transition-all duration-300 group-hover:-translate-x-1.5">
+              ←
+            </span>
+          </button>
+        </div>
 
-                <h3 className="text-base sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[var(--color-primary)] leading-snug sm:leading-tight tracking-tight">
-                  {work2.title}
-                </h3>
-              </div>
-
-              {/* Middle: Rich Description & Scope Highlights */}
-              <div className="my-auto py-2 sm:py-4 space-y-2.5 sm:space-y-3.5">
-                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-[var(--color-text-secondary)] leading-relaxed sm:leading-loose font-light">
-                  {work2.description || work2.shortDescription}
-                </p>
-
-                {work2.scope && work2.scope.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-1">
-                    {work2.scope.slice(0, 3).map((item, idx) => (
-                      <span
-                        key={idx}
-                        className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs text-[var(--color-text-secondary)] bg-white/90 border border-[var(--color-border)] px-2.5 py-1 rounded-md shadow-2xs"
-                      >
-                        <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] shrink-0" />
-                        <span className="line-clamp-1">{item}</span>
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Bottom: Action CTA */}
-              <div className="pt-2">
-                <button
-                  onClick={() => setSelectedProject(work2)}
-                  className="inline-flex items-center gap-2 sm:gap-3 px-4 sm:px-6 py-2 sm:py-3 bg-[var(--color-primary)] hover:bg-[var(--color-accent)] text-white text-xs sm:text-sm font-semibold rounded-md transition-all duration-300 shadow-sm hover:shadow-md cursor-pointer group"
-                >
-                  <span>استعراض تفاصيل العمل</span>
-                  <span className="text-[var(--color-accent)] group-hover:text-white transition-all duration-300 group-hover:-translate-x-1.5">
-                    ←
-                  </span>
-                </button>
-              </div>
-            </div>
-          </motion.div>
-        )}
+      </div>
+    </motion.div>
+  );
+})}
+            
 
         {/* Bottom: Category Icons + "View All" Button */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-[var(--color-border)]/80">

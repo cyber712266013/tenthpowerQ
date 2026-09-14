@@ -28,7 +28,6 @@ export interface Category {
 export const categories: Category[] = [
   { id: "all", slug: "all", label: "جميع الأعمال" },
   { id: "glass", slug: "glass", label: "زجاج وواجهات" },
-  { id: "aluminum", slug: "aluminum", label: "ألمنيوم ونوافذ" },
   { id: "kitchens", slug: "kitchens", label: "مطابخ وديكورات" },
   { id: "contracting", slug: "contracting", label: "مقاولات عامة" },
 ];
@@ -68,7 +67,7 @@ export const projects: Project[] = [
     title: "فاترينات وثلاجات العرض بالزجاج المنحني — متاجر الحلويات والكيك",
     category: "زجاج وواجهات",
     categorySlug: "glass",
-    location: "جدة — الرياض",
+    location: " الرياض",
     year: "2024",
     shortDescription: "تصميم وتصنيع فاترينات وثلاجات عرض أسطوانية بزجاج سكريت كيرف فائق النقاوة لمتاجر ومخابز الكيك الفاخرة.",
     description:
@@ -121,7 +120,7 @@ export const projects: Project[] = [
     title: "فاترينات وتجهيزات زجاجية وستانلس ستيل لقسم المخبوزات والحلويات — مركز تجاري",
     category: "زجاج وواجهات",
     categorySlug: "glass",
-    location: "جدة",
+    location: "الرياض",
     year: "2024",
     shortDescription: "تصميم وتصنيع فاترينات عرض زجاجية متعددة الطبقات بزوايا منحنية وطاولات خدمة ستانلس ستيل لقسم مخابز وحلويات.",
     description:
@@ -147,7 +146,7 @@ export const projects: Project[] = [
     title: "ديكورات داخلية راقية ومرايا مضيئة",
     category: "مطابخ وديكورات",
     categorySlug: "kitchens",
-    location: "جدة، حي الحمراء",
+    location: "الرياض",
     year: "2023",
     shortDescription: "تصميم وتنفيذ طاولات مخصصة للصالات الفاخرة ومرايا ديكورية مزودة بإضاءات خلفية مخفية للممرات.",
     description:
@@ -172,7 +171,7 @@ export const projects: Project[] = [
     title: "تشطيبات متكاملة ومقاولات معرض تجاري",
     category: "مقاولات عامة",
     categorySlug: "contracting",
-    location: "جدة، شارع التحلية",
+    location:"الرياض",
     year: "2023",
     shortDescription: "تنفيذ مقاولات وتشطيبات شاملة لمعرض تجاري من العظم حتى التسليم بنظام المفتاح.",
     description:
