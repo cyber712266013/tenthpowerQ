@@ -236,12 +236,27 @@ function AllProjectsModal({ onClose }: { onClose: () => void }) {
   );
 }
 
+// Helper to randomly pick 2 unique projects
+function getTwoRandomProjects(items: Project[]): [Project | undefined, Project | undefined] {
+  if (!items || items.length === 0) return [undefined, undefined];
+  if (items.length === 1) return [items[0], undefined];
+
+  const firstIndex = Math.floor(Math.random() * items.length);
+  let secondIndex = Math.floor(Math.random() * (items.length - 1));
+  if (secondIndex >= firstIndex) {
+    secondIndex += 1;
+  }
+  return [items[firstIndex], items[secondIndex]];
+}
+
 export default function ProjectsSection() {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const work1 = projects.find((p) => p.coverImage === "/images/Image4.png") || projects.find((p) => p.id === "p2") || projects[1];
-  const work2 = projects.find((p) => p.id === "p-spider-villa") || projects[0];
+  // اختيار مشروعين عشوائيين مختلفين عند تحميل الصفحة
+  const [[work1, work2]] = useState<[Project | undefined, Project | undefined]>(() =>
+    getTwoRandomProjects(projects)
+  );
 
   return (
     <section
@@ -260,80 +275,90 @@ export default function ProjectsSection() {
         </div>
 
         {/* Work 1: Image LEFT — Text RIGHT */}
-        <motion.div
-          className="flex flex-row-reverse items-center gap-3 sm:gap-6 md:gap-10 mb-10 md:mb-20"
-          initial={{ opacity: 0, y: 35 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {/* Image */}
-          <div className="w-[55%] sm:w-7/12">
-            <EditorialMedia
-              src="/images/Image4.png"
-              alt="قواطع زجاج سكريت وأبواب — مقر إداري"
-              tilt={2.5}
-              aspectRatio="aspect-[4/3] sm:aspect-[16/11] md:aspect-[16/10]"
-              hoverLabel="استعراض تفاصيل العمل"
-              onClick={() => setSelectedProject(work1)}
-            />
-          </div>
-          {/* Text beside image */}
-          <div className="w-[45%] sm:w-5/12 text-right space-y-1.5 sm:space-y-3 md:space-y-4">
-            <span className="text-[9px] sm:text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest">زجاج سكريت</span>
-            <h3 className="text-sm sm:text-xl md:text-2xl font-bold text-[var(--color-primary)] leading-snug">
-              {work1?.title || "قواطع زجاج سكريت وأبواب"}
-            </h3>
-            <p className="text-[10px] sm:text-sm text-[var(--color-text-secondary)] leading-relaxed font-light">
-              {work1?.description || "تنفيذ أنظمة زجاج سكريت حديثة لمقر إداري راقٍ، بمعايير عزل صوتي وحراري عالية وتشطيبات فائقة الدقة."}
-            </p>
-            <button
-              onClick={() => setSelectedProject(work1)}
-              className="inline-flex items-center gap-1 sm:gap-2 text-[9px] sm:text-xs font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer group"
-            >
-              <span>استعراض تفاصيل العمل</span>
-              <span className="text-[var(--color-accent)] transition-transform duration-200 group-hover:-translate-x-1">←</span>
-            </button>
-          </div>
-        </motion.div>
+        {work1 && (
+          <motion.div
+            className="flex flex-row-reverse items-center gap-3 sm:gap-6 md:gap-10 mb-10 md:mb-20"
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {/* Image */}
+            <div className="w-[55%] sm:w-7/12">
+              <EditorialMedia
+                src={work1.coverImage || work1.images?.[0]}
+                videoUrl={work1.videoUrl}
+                alt={work1.title}
+                tilt={2.5}
+                aspectRatio="aspect-[4/3] sm:aspect-[16/11] md:aspect-[16/10]"
+                hoverLabel="استعراض تفاصيل العمل"
+                onClick={() => setSelectedProject(work1)}
+              />
+            </div>
+            {/* Text beside image */}
+            <div className="w-[45%] sm:w-5/12 text-right space-y-1.5 sm:space-y-3 md:space-y-4">
+              <span className="text-[9px] sm:text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest">
+                {work1.category}
+              </span>
+              <h3 className="text-sm sm:text-xl md:text-2xl font-bold text-[var(--color-primary)] leading-snug">
+                {work1.title}
+              </h3>
+              <p className="text-[10px] sm:text-sm text-[var(--color-text-secondary)] leading-relaxed font-light line-clamp-3 md:line-clamp-4">
+                {work1.shortDescription || work1.description}
+              </p>
+              <button
+                onClick={() => setSelectedProject(work1)}
+                className="inline-flex items-center gap-1 sm:gap-2 text-[9px] sm:text-xs font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer group"
+              >
+                <span>استعراض تفاصيل العمل</span>
+                <span className="text-[var(--color-accent)] transition-transform duration-200 group-hover:-translate-x-1">←</span>
+              </button>
+            </div>
+          </motion.div>
+        )}
 
         {/* Work 2: Image RIGHT — Text LEFT */}
-        <motion.div
-          className="flex flex-row items-center gap-3 sm:gap-6 md:gap-10 mb-10 md:mb-20"
-          initial={{ opacity: 0, y: 35 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {/* Image */}
-          <div className="w-[55%] sm:w-7/12">
-            <EditorialMedia
-              src="/images/image5.png"
-              alt="واجهات سبايدر زجاجية — فيلا بانورامية"
-              tilt={-2.0}
-              aspectRatio="aspect-[4/3] sm:aspect-[16/11] md:aspect-[16/10]"
-              hoverLabel="استعراض تفاصيل العمل"
-              onClick={() => setSelectedProject(work2)}
-            />
-          </div>
-          {/* Text beside image */}
-          <div className="w-[45%] sm:w-5/12 text-right space-y-1.5 sm:space-y-3 md:space-y-4">
-            <span className="text-[9px] sm:text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest">واجهات معمارية</span>
-            <h3 className="text-sm sm:text-xl md:text-2xl font-bold text-[var(--color-primary)] leading-snug">
-              {work2?.title || "واجهات سبايدر زجاجية بانورامية"}
-            </h3>
-            <p className="text-[10px] sm:text-sm text-[var(--color-text-secondary)] leading-relaxed font-light">
-              {work2?.description || "واجهة بانورامية زجاجية بنظام السبايدر لفيلا فاخرة، تتيح إطلالة 180° مع عزل حراري مزدوج وتشطيب ألمنيوم برونزي."}
-            </p>
-            <button
-              onClick={() => setSelectedProject(work2)}
-              className="inline-flex items-center gap-1 sm:gap-2 text-[9px] sm:text-xs font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer group"
-            >
-              <span>استعراض تفاصيل العمل</span>
-              <span className="text-[var(--color-accent)] transition-transform duration-200 group-hover:-translate-x-1">←</span>
-            </button>
-          </div>
-        </motion.div>
+        {work2 && (
+          <motion.div
+            className="flex flex-row items-center gap-3 sm:gap-6 md:gap-10 mb-10 md:mb-20"
+            initial={{ opacity: 0, y: 35 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {/* Image */}
+            <div className="w-[55%] sm:w-7/12">
+              <EditorialMedia
+                src={work2.coverImage || work2.images?.[0]}
+                videoUrl={work2.videoUrl}
+                alt={work2.title}
+                tilt={-2.0}
+                aspectRatio="aspect-[4/3] sm:aspect-[16/11] md:aspect-[16/10]"
+                hoverLabel="استعراض تفاصيل العمل"
+                onClick={() => setSelectedProject(work2)}
+              />
+            </div>
+            {/* Text beside image */}
+            <div className="w-[45%] sm:w-5/12 text-right space-y-1.5 sm:space-y-3 md:space-y-4">
+              <span className="text-[9px] sm:text-xs font-semibold text-[var(--color-accent)] uppercase tracking-widest">
+                {work2.category}
+              </span>
+              <h3 className="text-sm sm:text-xl md:text-2xl font-bold text-[var(--color-primary)] leading-snug">
+                {work2.title}
+              </h3>
+              <p className="text-[10px] sm:text-sm text-[var(--color-text-secondary)] leading-relaxed font-light line-clamp-3 md:line-clamp-4">
+                {work2.shortDescription || work2.description}
+              </p>
+              <button
+                onClick={() => setSelectedProject(work2)}
+                className="inline-flex items-center gap-1 sm:gap-2 text-[9px] sm:text-xs font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer group"
+              >
+                <span>استعراض تفاصيل العمل</span>
+                <span className="text-[var(--color-accent)] transition-transform duration-200 group-hover:-translate-x-1">←</span>
+              </button>
+            </div>
+          </motion.div>
+        )}
 
         {/* Bottom: Category Icons + "View All" Button */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-[var(--color-border)]/80">
