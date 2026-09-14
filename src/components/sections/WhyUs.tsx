@@ -109,7 +109,7 @@ export default function WhyUsSection() {
               transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
             >
               <EditorialMedia
-                src="/images/Image1.png"
+                src="/images/luxury-polished-meeting-table.png"
                 alt="معايير الجودة والالتزام في القوة العاشرة"
                 tilt={-2}
                 aspectRatio="aspect-[16/11] md:aspect-[16/10]"

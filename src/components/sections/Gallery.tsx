@@ -106,7 +106,7 @@ const allVisualWorks: VisualWorkItem[] = [
   },
   {
     id: "w16",
-    src: "/images/services/management.jpg",
+    src: "/images/services/luxury-polished-meeting-table-2.jpg",
     tilt: 1.8,
     alignment: "left",
   },
@@ -154,7 +154,7 @@ const allVisualWorks: VisualWorkItem[] = [
   },
   {
     id: "w24",
-    src: "/images/Image1.png",
+    src: "/images/luxury-polished-meeting-table.png",
     tilt: 1.8,
     alignment: "left",
   },
