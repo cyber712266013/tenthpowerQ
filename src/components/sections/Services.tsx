@@ -7,18 +7,7 @@ import EditorialMedia from "../ui/EditorialMedia";
 const serviceListItems = [
   {
     id: "s1",
-    title: "زجاج سكريت وقواطع مكاتب",
-    icon: (
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" />
-        <path d="M3 9h18" />
-        <path d="M9 21V9" />
-      </svg>
-    ),
-  },
-  {
-    id: "s2",
-    title: "واجهات زجاجية وكارتن وول",
+    title: "واجهات زجاج استركشر وكارتن وول",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 21h18" />
@@ -33,8 +22,8 @@ const serviceListItems = [
     ),
   },
   {
-    id: "s3",
-    title: "أنظمة وقطاعات ألمنيوم معمارية",
+    id: "s2",
+    title: "واجهات سبايدر وتكسيات كلادينج",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="4" width="20" height="16" rx="2" />
@@ -44,21 +33,30 @@ const serviceListItems = [
     ),
   },
   {
+    id: "s3",
+    title: "مصاعد بانوراما وفاترينات كيرف مقوس",
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="9" />
+        <path d="M12 3a9 9 0 0 1 9 9" />
+      </svg>
+    ),
+  },
+  {
     id: "s4",
-    title: "تفصيل مطابخ عصرية حديثة",
+    title: "ديكورات داخلية ومرايا مضيئة وطاولات",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="3" width="18" height="18" rx="2" />
         <path d="M3 15h18" />
         <circle cx="7.5" cy="9" r="1.5" />
         <circle cx="16.5" cy="9" r="1.5" />
-        <line x1="9" y1="18" x2="15" y2="18" />
       </svg>
     ),
   },
   {
     id: "s5",
-    title: "أبواب ونوافذ وديكورات ومقاولات",
+    title: "زجاج سكريت ومقاولات عامة وتشطيبات",
     icon: (
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
@@ -101,7 +99,7 @@ function AllServicesModal({ onClose }: { onClose: () => void }) {
             {services.map((s) => (
               <div key={s.id} className="pt-6 first:pt-0">
                 <h3 className="text-lg font-bold text-[var(--color-primary)] mb-2 flex items-center gap-2">
-                  <span className="text-[var(--color-accent)] font-semibold">0{s.order}</span>
+                  <span className="text-[var(--color-accent)] font-semibold">{s.order < 10 ? `0${s.order}` : s.order}</span>
                   <span>{s.title}</span>
                 </h3>
                 <p className="text-[var(--color-text-secondary)] text-sm leading-relaxed mb-3">{s.description}</p>
