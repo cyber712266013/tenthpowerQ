@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { projects, categories } from "../../data/projects";
 import type { Project } from "../../data/projects";
@@ -56,6 +56,15 @@ const projectCategories = [
 function ProjectDetailModal({ project, onClose }: { project: Project; onClose: () => void }) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
+  // دمج الصورة الرئيسية والصور الإضافية مع إزالة أي تكرار
+  const allImages = useMemo(() => {
+    const list = [project.coverImage, ...(project.images || [])].filter(Boolean);
+    return Array.from(new Set(list));
+  }, [project]);
+
+  const [activeImageIndex, setActiveImageIndex] = useState<number>(0);
+  const currentImage = allImages[activeImageIndex] || project.coverImage;
+
   return (
     <>
       <div className="fixed inset-0 z-[102] overflow-y-auto flex items-center justify-center p-3 sm:p-6">
@@ -66,19 +75,90 @@ function ProjectDetailModal({ project, onClose }: { project: Project; onClose: (
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.96 }}
         >
+          {/* زر الإغلاق */}
           <button
             onClick={onClose}
-            className="absolute top-6 left-6 w-10 h-10 flex items-center justify-center bg-[var(--color-primary)] text-white hover:bg-[var(--color-accent)] transition-colors cursor-pointer z-10"
+            className="absolute top-6 left-6 w-10 h-10 flex items-center justify-center bg-[var(--color-primary)] text-white hover:bg-[var(--color-accent)] transition-colors cursor-pointer z-10 shadow-md"
             aria-label="إغلاق"
           >
             ✕
           </button>
-          <div className="relative aspect-[16/8] overflow-hidden mb-6 bg-black">
-            <img src={project.coverImage} alt={project.title} className="w-full h-full object-cover" />
+
+          {/* الصورة الرئيسية الفعالة مع إمكانية التكبير */}
+          <div
+            onClick={() => setLightboxIndex(activeImageIndex)}
+            className="relative aspect-[16/8] overflow-hidden mb-4 bg-black group cursor-pointer border border-[var(--color-border)]"
+            title="انقر لتكبير الصورة وعرض الألبوم كاملاً"
+          >
+            <img
+              src={currentImage}
+              alt={project.title}
+              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            {/* Hover overlay with zoom prompt */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-between p-4 sm:p-5">
+              <span className="inline-flex items-center gap-2 bg-black/70 backdrop-blur-md text-white text-xs sm:text-sm font-medium px-3.5 py-1.5 rounded-full border border-white/20">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                </svg>
+                <span>انقر للتكبير والتصفح الكامل</span>
+              </span>
+              {allImages.length > 1 && (
+                <span className="bg-black/70 backdrop-blur-md text-white/90 text-xs px-3 py-1.5 rounded-full border border-white/20 font-sans">
+                  {activeImageIndex + 1} / {allImages.length}
+                </span>
+              )}
+            </div>
           </div>
+
+          {/* شريط مصغرات الصور الإضافية السريع أسفل الصورة الرئيسية مباشرة */}
+          {allImages.length > 1 && (
+            <div className="mb-6">
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-xs font-semibold text-[var(--color-accent)] uppercase">
+                  ألبوم صور المشروع ({allImages.length})
+                </span>
+                <span className="text-[11px] text-[var(--color-muted)]">
+                  اختر صورة للعرض المباشر أو انقر مرتين للتكبير
+                </span>
+              </div>
+              <div className="flex gap-2.5 overflow-x-auto pb-2">
+                {allImages.map((img, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setActiveImageIndex(idx)}
+                    onDoubleClick={() => setLightboxIndex(idx)}
+                    className={`relative flex-shrink-0 w-20 sm:w-24 aspect-[4/3] rounded overflow-hidden border-2 transition-all duration-200 cursor-pointer ${
+                      activeImageIndex === idx
+                        ? "border-[var(--color-accent)] ring-2 ring-[var(--color-accent)]/30 scale-102"
+                        : "border-[var(--color-border)] opacity-70 hover:opacity-100 hover:border-[var(--color-muted)]"
+                    }`}
+                    title={`صورة ${idx + 1}`}
+                  >
+                    <img
+                      src={img}
+                      alt={`${project.title} ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                    {idx === 0 && (
+                      <span className="absolute bottom-0 right-0 left-0 bg-black/65 text-white text-[8px] py-0.5 text-center font-sans">
+                        الرئيسية
+                      </span>
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* تفاصيل المشروع */}
           <span className="text-xs text-[var(--color-accent)] font-semibold uppercase">{project.category}</span>
           <h2 className="text-2xl sm:text-3xl font-bold text-[var(--color-primary)] mt-1 mb-4">{project.title}</h2>
           <p className="text-[var(--color-text-secondary)] text-sm md:text-base leading-relaxed mb-6 font-light">{project.description}</p>
+
+          {/* نطاق العمل */}
           {project.scope && (
             <div className="border-t border-[var(--color-border)] pt-5 mb-6">
               <h4 className="text-xs font-semibold text-[var(--color-accent)] uppercase mb-3">نطاق العمل:</h4>
@@ -92,50 +172,122 @@ function ProjectDetailModal({ project, onClose }: { project: Project; onClose: (
               </div>
             </div>
           )}
-       {project.videoUrl && (
-  <div className="border-t border-[var(--color-border)] pt-5 mb-6">
-    <h4 className="text-xs font-semibold text-[var(--color-accent)] uppercase mb-3">
-      توثيق الفيديو:
-    </h4>
 
-    <div className="aspect-video bg-black overflow-hidden">
-      {parseVideoEmbed(project.videoUrl).type === "file" ? (
-        <video
-          src={project.videoUrl}
-          controls
-          autoPlay
-          playsInline
-          className="w-full h-full object-cover"
-        />
-      ) : (
-        <iframe
-          src={parseVideoEmbed(project.videoUrl).embedUrl}
-          className="w-full h-full border-0"
-          allowFullScreen
-        />
-      )}
-    </div>
-  </div>
-)}
+          {/* قسم استعراض الصور الإضافية والتوثيق الميداني بالتفصيل */}
+          {allImages.length > 1 && (
+            <div className="border-t border-[var(--color-border)] pt-5 mb-6">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <h4 className="text-xs font-semibold text-[var(--color-accent)] uppercase">
+                    الصور الإضافية والتوثيق الميداني:
+                  </h4>
+                  <span className="bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-[10px] px-2 py-0.5 rounded-full font-medium font-sans">
+                    {allImages.length} صور موثقة
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setLightboxIndex(activeImageIndex)}
+                  className="inline-flex items-center gap-1.5 text-xs text-[var(--color-accent)] hover:text-[var(--color-primary)] transition-colors cursor-pointer font-medium"
+                >
+                  <span>عرض ملء الشاشة</span>
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" />
+                  </svg>
+                </button>
+              </div>
 
-{/* Bottom Action — داخل نافذة تفاصيل العمل */}
-<div className="border-t border-[var(--color-border)] pt-5 mt-2 flex justify-end">
-  <button
-    onClick={onClose}
-    className="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer group"
-  >
-    <span>العودة إلى جميع الأعمال</span>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {allImages.map((img, idx) => (
+                  <div
+                    key={idx}
+                    onClick={() => {
+                      setActiveImageIndex(idx);
+                      setLightboxIndex(idx);
+                    }}
+                    className={`group relative aspect-[4/3] rounded overflow-hidden border cursor-pointer transition-all duration-300 ${
+                      activeImageIndex === idx
+                        ? "border-[var(--color-accent)] shadow-md ring-2 ring-[var(--color-accent)]/30"
+                        : "border-[var(--color-border)] hover:border-[var(--color-accent)]/70 hover:shadow-sm"
+                    }`}
+                  >
+                    <img
+                      src={img}
+                      alt={`${project.title} - صورة ${idx + 1}`}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-108"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/35 transition-colors flex items-center justify-center">
+                      <span className="opacity-0 group-hover:opacity-100 transition-opacity bg-black/75 backdrop-blur-xs text-white text-[10px] px-2.5 py-1 rounded flex items-center gap-1">
+                        <span>تكبير</span>
+                        <span>⤢</span>
+                      </span>
+                    </div>
+                    {idx === 0 ? (
+                      <span className="absolute top-2 right-2 bg-black/70 backdrop-blur-xs text-white text-[9px] px-2 py-0.5 rounded font-sans">
+                        الصورة الرئيسية
+                      </span>
+                    ) : (
+                      <span className="absolute top-2 right-2 bg-black/60 backdrop-blur-xs text-white text-[9px] px-2 py-0.5 rounded font-sans">
+                        صورة إضافية #{idx}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-    <span className="text-[var(--color-accent)] transition-transform duration-200 group-hover:-translate-x-1">
-      ←
-    </span>
-  </button>
-</div>
+          {/* توثيق الفيديو */}
+          {project.videoUrl && (
+            <div className="border-t border-[var(--color-border)] pt-5 mb-6">
+              <h4 className="text-xs font-semibold text-[var(--color-accent)] uppercase mb-3">
+                توثيق الفيديو:
+              </h4>
+
+              <div className="aspect-video bg-black overflow-hidden">
+                {parseVideoEmbed(project.videoUrl).type === "file" ? (
+                  <video
+                    src={project.videoUrl}
+                    controls
+                    autoPlay
+                    playsInline
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <iframe
+                    src={parseVideoEmbed(project.videoUrl).embedUrl}
+                    className="w-full h-full border-0"
+                    allowFullScreen
+                  />
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Bottom Action — داخل نافذة تفاصيل العمل */}
+          <div className="border-t border-[var(--color-border)] pt-5 mt-2 flex justify-end">
+            <button
+              onClick={onClose}
+              className="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-semibold text-[var(--color-muted)] hover:text-[var(--color-primary)] transition-colors duration-200 cursor-pointer group"
+            >
+              <span>العودة إلى جميع الأعمال</span>
+
+              <span className="text-[var(--color-accent)] transition-transform duration-200 group-hover:-translate-x-1">
+                ←
+              </span>
+            </button>
+          </div>
         </motion.div>
       </div>
 
       {lightboxIndex !== null && (
-        <Lightbox images={project.images} initialIndex={lightboxIndex} onClose={() => setLightboxIndex(null)} />
+        <Lightbox
+          images={allImages}
+          initialIndex={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          altPrefix={project.title}
+        />
       )}
     </>
   );

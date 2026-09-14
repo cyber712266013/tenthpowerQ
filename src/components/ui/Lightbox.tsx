@@ -47,7 +47,7 @@ export default function Lightbox({
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[100] bg-black/95 flex flex-col"
+        className="fixed inset-0 z-[200] bg-black/95 flex flex-col"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}

@@ -161,7 +161,8 @@ export const projects: Project[] = [
     coverImage: "/images/Image1.png",
     images: [
       "/images/Image1.png",
-      "/images/services/infrastructure.jpg"
+      "/images/services/infrastructure.jpg",
+      "/images/services/management.jpg",
     ],
     featured: false,
   },
@@ -216,31 +217,6 @@ export const projects: Project[] = [
     ],
     featured: true,
   },
-  {
-    id: "p5",
-    slug: "interior-glass-decor",
-    title: "مرايا ديكورية وتكسيات زجاجية لبهو فندق",
-    category: "مطابخ وديكورات",
-    categorySlug: "kitchens",
-    location: "جدة، حي الحمراء",
-    year: "2023",
-    shortDescription: "تصميم وتنفيذ تكسيات مرايا برونزية مشطوفة وألواح زجاجية ديكورية لبهو وصالات فندقية.",
-    description:
-      "تنفيذ أعمال الديكور الزجاجي الفاخر لبهو وممرات فندق، تضمّنت جدران كاملة من المرايا البلجيكية البرونزية المشطوفة بالليزر (Beveled Mirror Panels)، ودرابزينات زجاجية سكريت للدرج الشرفي، وأبواب مداخل زجاجية بارتفاع 3.5 متر بإطارات ستانلس ستيل تيتانيوم ذهبي.",
-    scope: [
-      "مرايا برونزية مشطوفة مقطوعة بدقة CNC عالية",
-      "درابزينات زجاج سكريت 16 ملم مصفح بدون أعمدة ظاهرة",
-      "أبواب مداخل زجاجية ضخمة بمقابض ذهبية مطفية فاخرة",
-      "إضاءات خلفية مخفية تبرز جمال الانعكاسات الزجاجية",
-    ],
-    coverImage: "/images/services/management.jpg",
-    images: [
-      "/images/services/management.jpg",
-  
-    ],
-    featured: false,
-  },
-
 ];
 
 export default projects;
