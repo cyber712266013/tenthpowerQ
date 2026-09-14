@@ -49,7 +49,7 @@ export default function Footer() {
 
             <div className="space-y-1 text-white/35 text-xs leading-6">
               <p>سجل تجاري: {companyInfo.registrationNumber}</p>
-              <p>الرقم الموحد: {companyInfo.unifiedNumber}</p>
+     
             </div>
           </div>
 
