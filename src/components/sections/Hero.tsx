@@ -79,7 +79,7 @@ export default function HeroSection() {
             >
               <EditorialMedia
                 src="/images/Image4.png"
-                alt="مؤسسة القوة العاشرة للمقاولات والتجارة العامة"
+            alt="مؤسسة القوة العاشرة للمقاولات العامة"
                 tilt={-3}
                 aspectRatio="aspect-[16/11] md:aspect-[16/10]"
                 hoverLabel="استكشف مشاريعنا"

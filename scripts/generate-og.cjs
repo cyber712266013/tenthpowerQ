@@ -193,9 +193,8 @@ const html = `<!DOCTYPE html>
       <img src="data:image/png;base64,${logoData}" class="logo-img" alt="شعار القوة العاشرة" />
     </div>
 
-    <h1 class="company-title">مؤسسة القوة العاشرة للمقاولات والتجارة العامة</h1>
+      <h1 class="company-title">مؤسسة القوة العاشرة للمقاولات العامة</h1>
     <p class="tagline">إبداع الزجاج والألمنيوم .. ودقة المقاولات العامة</p>
-
     <div class="services-row">
       <div class="badge">🏢 واجهات زجاجية واستركشر</div>
       <div class="badge">🛡️ زجاج سكريت وديكورات</div>

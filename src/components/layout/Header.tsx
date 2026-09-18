@@ -103,8 +103,8 @@ export default function Header() {
                 <span className="font-bold text-base md:text-lg text-[var(--color-primary)] leading-none tracking-tight">
                   القوة العاشرة
                 </span>
-                <span className="text-[10px] md:text-xs text-[var(--color-muted)] tracking-wider mt-1">
-                  للمقاولات والتجارة العامة
+               <span className="text-[10px] md:text-xs text-[var(--color-muted)] tracking-wider mt-1">
+                  للمقاولات العامة
                 </span>
               </div>
             </button>
