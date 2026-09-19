@@ -29,7 +29,7 @@ export default function AboutSection() {
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
               <EditorialMedia
-                src="/images/about.png"
+                src="/images/about.webp"
                 alt="قواطع زجاج سكريت وأنظمة ألمنيوم من تنفيذ القوة العاشرة"
                 tilt={2.5}
                 aspectRatio="aspect-[16/11] md:aspect-[16/10]"

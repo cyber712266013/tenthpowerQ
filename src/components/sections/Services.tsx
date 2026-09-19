@@ -198,7 +198,7 @@ export default function ServicesSection() {
               transition={{ duration: 0.8, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
             >
               <EditorialMedia
-                src="/images/hero-bg.gif"
+                src="/images/hero-bg.webp"
                 alt="تنفيذ أعمال الإنشاءات والمقاولات"
                 tilt={-2.5}
                 aspectRatio="aspect-[16/11] md:aspect-[16/10]"

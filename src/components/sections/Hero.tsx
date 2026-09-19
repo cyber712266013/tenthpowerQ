@@ -78,7 +78,7 @@ export default function HeroSection() {
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
               <EditorialMedia
-                src="/images/Image4.png"
+                src="/images/Image4.webp"
             alt="مؤسسة القوة العاشرة للمقاولات العامة"
                 tilt={-3}
                 aspectRatio="aspect-[16/11] md:aspect-[16/10]"
